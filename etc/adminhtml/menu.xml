@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Module Menu configurations
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SoftwareAgil_StarkenPro::starkenpro" title="Starken" module="SoftwareAgil_StarkenPro" sortOrder="55" resource="SoftwareAgil_StarkenPro::starkenpro" parent="Magento_Backend::stores"/>
+        <add id="SoftwareAgil_StarkenPro::log" title="API Calls Log" module="SoftwareAgil_StarkenPro" sortOrder="10" parent="SoftwareAgil_StarkenPro::starkenpro" action="starkenpro/starken/log" resource="SoftwareAgil_StarkenPro::log"/>
+        <add id="SoftwareAgil_StarkenPro::configuration" title="Configuration" module="SoftwareAgil_StarkenPro" sortOrder="100" action="adminhtml/system_config/edit/section/carriers" resource="SoftwareAgil_StarkenPro::configuration" parent="SoftwareAgil_StarkenPro::starkenpro"/>
+    </menu>
+</config>

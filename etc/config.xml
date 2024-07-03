@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * General configurations
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <starkenpro>
+                <active>0</active>
+                <title>Starken</title>
+                <gateway_url>https://apiprod.starkenpro.cl</gateway_url>
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <package>BULTO</package>
+                <service>NORMAL</service>
+                <deliveries>AGENCIA</deliveries>
+                <specificerrmsg>No hay tarifas de envío disponibles. Si desea realizar un envío utilizando este método de envío, comuníquese con nosotros.</specificerrmsg>
+                <debug>0</debug>
+                <showmethod>1</showmethod>
+                <sort_order>0</sort_order>
+                <allowed_methods>normal_agencia_2,normal_domicilio_2,expreso_agencia_2,expreso_domicilio_2,normal_agencia_3,normal_domicilio_3,expreso_agencia_3,expreso_domicilio_3</allowed_methods>
+                <model>SoftwareAgil\StarkenPro\Model\Carrier</model>
+                <shipping_guide_notification>carriers_starkenpro_shipping_guide_notification</shipping_guide_notification>
+            </starkenpro>
+        </carriers>
+        <customer>
+            <address_templates>
+                <text>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}
+                    {{depend rut}}RUT: {{var rut}}{{/depend}}
+                    {{depend company}}{{var company}}{{/depend}}
+                    {{if street1}}{{var street1}}
+                    {{/if}}
+                    {{depend street2}}{{var street2}}{{/depend}}
+                    {{depend street3}}{{var street3}}{{/depend}}
+                    {{depend street4}}{{var street4}}{{/depend}}
+                    {{if commune}}{{var commune}}, {{/if}}{{if region}}{{var region}}, {{/if}}
+                    {{var country}}
+                    {{depend telephone}}T: {{var telephone}}{{/depend}}
+                    {{depend fax}}F: {{var fax}}{{/depend}}
+                    {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}</text>
+                <oneline>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, RUT: {{depend rut}}{{var rut}}{{/depend}}, {{var street}}, {{var commune}}, {{var region}} , {{var country}}</oneline>
+                <html><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br />{{/depend}}
+{{depend rut}}RUT: {{var rut}}<br />{{/depend}}
+{{depend company}}{{var company}}<br />{{/depend}}
+{{if street1}}{{var street1}}<br />{{/if}}
+{{depend street2}}{{var street2}}<br />{{/depend}}
+{{depend street3}}{{var street3}}<br />{{/depend}}
+{{depend street4}}{{var street4}}<br />{{/depend}}
+{{if commune}}{{var commune}}, {{/if}}{{if region}}{{var region}}, {{/if}}<br />
+{{var country}}<br />
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
+{{depend fax}}<br />F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]></html>
+                <pdf><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}|
+{{depend rut}}RUT: {{var rut}}|{{/depend}}
+{{depend company}}{{var company}}|{{/depend}}
+{{if street1}}{{var street1}}|{{/if}}
+{{depend street2}}{{var street2}}|{{/depend}}
+{{depend street3}}{{var street3}}|{{/depend}}
+{{depend street4}}{{var street4}}|{{/depend}}
+{{if commune}}{{var commune}}, {{/if}}{{if region}}{{var region}}, {{/if}}|
+{{var country}}|
+{{depend telephone}}T: {{var telephone}}|{{/depend}}
+{{depend fax}}F: {{var fax}}|{{/depend}}|
+{{depend vat_id}}VAT: {{var vat_id}}{{/depend}}|]]></pdf>
+            </address_templates>
+        </customer>
+        <general>
+            <country>
+                <optional_zip_countries>CL,HK,IE,MO,PA,GB</optional_zip_countries>
+            </country>
+            <locale>
+                <weight_unit>kgs</weight_unit>
+            </locale>
+        </general>
+    </default>
+</config>

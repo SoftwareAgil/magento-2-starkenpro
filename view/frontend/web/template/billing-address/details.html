@@ -1,0 +1,41 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
+    <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
+    <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+    <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span><br/>
+    <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
+    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
+
+    <each args="data: currentBillingAddress().customAttributes, as: 'element'">
+        <if args="typeof element === 'object'">
+            <if args="element.label && element.attribute_code !== 'commune_id' && element.attribute_code !== 'commune' && element.attribute_code !== 'agency_id'">
+                <text args="element.label"/>
+            </if>
+            <ifnot args="element.label">
+                <if args="element.value && element.attribute_code !== 'commune_id' && element.attribute_code !== 'agency_id'">
+                    <text args="element.value"/>
+                </if>
+            </ifnot>
+        </if>
+        <if args="typeof element === 'string'">
+            <text args="element"/>
+        </if>
+        <if args="element.attribute_code !== 'commune_id' && element.attribute_code !== 'agency_id'">
+            <br/>
+        </if>
+    </each>
+
+    <button visible="!isAddressSameAsShipping()"
+            type="button"
+            class="action action-edit-address"
+            click="editAddress">
+        <span translate="'Edit'"></span>
+    </button>
+</div>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Dependencies Injections configurations
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="softwareagil_extra_checkout_address_fields_layoutprocessor" xsi:type="object">SoftwareAgil\StarkenPro\Block\Checkout\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Shipping">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="softwareagil_extra_checkout_cart_address_fields_layoutprocessor" xsi:type="object">SoftwareAgil\StarkenPro\Block\Cart\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="carriers/starkenpro/password" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+	<type name="Magento\Quote\Model\ShippingAddressManagement">
+		<plugin disabled="false" name="SoftwareAgil_StarkenPro_Plugin_Magento_Quote_Model_ShippingAddressManagement" sortOrder="10" type="SoftwareAgil\StarkenPro\Plugin\Magento\Quote\Model\ShippingAddressManagement"/>
+	</type>
+	<type name="Magento\Quote\Model\BillingAddressManagement">
+		<plugin disabled="false" name="SoftwareAgil_StarkenPro_Plugin_Magento_Quote_Model_BillingAddressManagement" sortOrder="20" type="SoftwareAgil\StarkenPro\Plugin\Magento\Quote\Model\BillingAddressManagement"/>
+	</type>
+    <type name="Magento\Quote\Model\Quote\Address\BillingAddressPersister">
+        <plugin disabled="false" name="SoftwareAgil_StarkenPro_Plugin_Magento_Quote_Model_Quote_Address_BillingAddressPersister" sortOrder="30" type="SoftwareAgil\StarkenPro\Plugin\Magento\Quote\Model\Quote\Address\BillingAddressPersister"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address\ToOrderAddress">
+        <plugin name="sa_split_shipping_convert_address" type="SoftwareAgil\StarkenPro\Plugin\Magento\Quote\Model\Quote\Address\ToOrderAddress"/>
+    </type>
+    <type name="Magento\Customer\Model\Address">
+        <plugin name="updateDataCustomerAddress" type="SoftwareAgil\StarkenPro\Model\Plugin\AddCustomAttributesToCustomerAddress"/>
+    </type>
+    <!--Grid collection-->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sp_api_calls_log_grid_data_source" xsi:type="string">SoftwareAgil\StarkenPro\Model\ResourceModel\Log\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="SoftwareAgil\StarkenPro\Model\ResourceModel\Log\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sa_sp_api_calls_log</argument>
+            <argument name="resourceModel" xsi:type="string">SoftwareAgil\StarkenPro\Model\ResourceModel\Log</argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -1,0 +1,246 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'prototype'
+], function () {
+
+    if (!$('carriers_starkenpro-head')) {
+        return;
+    }
+    
+    var spOriginModel = Class.create();
+    spOriginModel.prototype = {
+        initialize : function()
+        {
+            this.reload = false;
+            this.loader = new varienLoader(true);
+            this.agenciesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/communeAgency'))) ?>";
+
+            this.bindCommuneAgencyRelation();
+        },
+        bindCommuneAgencyRelation : function(parentId)
+        {
+            if (parentId) {
+                // todo: fix bug in IE
+                var communeElements = $$('#'+parentId+' .communes');
+            } else {
+                var communeElements = $$('.communes');
+            }
+            for(var i=0; i<communeElements.size(); i++) {
+                Event.observe(communeElements[i], 'change', this.reloadAgencyField.bind(this));
+                this.initAgencyField(communeElements[i]);
+            }
+        },
+        initAgencyField : function(element)
+        {
+            var communeElement = element;
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $(communeElement.id.replace(/commune_origin/, 'agency_origin'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        },
+        reloadAgencyField : function(event)
+        {
+            this.reload = true;
+            var communeElement = Event.element(event);
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $(communeElement.id.replace(/commune_origin/, 'agency_origin'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        },
+        refreshAgencyField : function(serverResponse)
+        {
+            if (serverResponse) {
+                var data = eval('(' + serverResponse + ')');
+                var value = this.agencyElement.value;
+                var disabled = this.agencyElement.disabled;
+                if (data.length) {
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.agencyElement.name);
+                    select.setAttribute('title', this.agencyElement.title);
+                    select.setAttribute('id', this.agencyElement.id);
+                    select.setAttribute('class', 'required-entry select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (data[i].value == '') {
+                                option.innerText = '<?php echo __('Please select a agency.'); ?>';
+                            }
+                            if (this.agencyElement.value &&
+                                (this.agencyElement.value == data[i].value || this.agencyElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    var parentNode = this.agencyElement.parentNode;
+                    var agencyElementId = this.agencyElement.id;
+                    parentNode.innerHTML = select.outerHTML;
+
+                    this.agencyElement = $(agencyElementId);
+                } else if (this.reload) {
+                    this.clearAgencyField(disabled);
+                }
+            }
+        },
+        clearAgencyField: function(disabled) {
+            var text = document.createElement('input');
+            text.setAttribute('type', 'text');
+            text.setAttribute('name', this.agencyElement.name);
+            text.setAttribute('title', this.agencyElement.title);
+            text.setAttribute('id', this.agencyElement.id);
+            text.setAttribute('class', 'input-text');
+            if (disabled) {
+                text.setAttribute('disabled', '');
+            }
+            var parentNode = this.agencyElement.parentNode;
+            var agencyElementId = this.agencyElement.id;
+            parentNode.innerHTML = text.outerHTML;
+            this.agencyElement = $(agencyElementId);
+        }
+    }
+    spOriginAddress = new spOriginModel();
+
+    var spCcModel = Class.create();
+    spCcModel.prototype = {
+        initialize : function()
+        {
+            this.reload = false;
+            this.loader = new varienLoader(true);
+            this.ccostsUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/ccteCcost'))) ?>";
+
+            this.bindCcteCcostRelation();
+        },
+        bindCcteCcostRelation : function(parentId)
+        {
+            if (parentId) {
+                // todo: fix bug in IE
+                var ccteElements = $$('#'+parentId+' .cctes');
+            } else {
+                var ccteElements = $$('.cctes');
+            }
+            for(var i=0; i<ccteElements.size(); i++) {
+                Event.observe(ccteElements[i], 'change', this.reloadCcostField.bind(this));
+                this.initCcostField(ccteElements[i]);
+            }
+        },
+        initCcostField : function(element)
+        {
+            var ccteElement = element;
+            if (ccteElement && ccteElement.id) {
+                var ccostElement  = $(ccteElement.id.replace(/checking_account/, 'cost_center'));
+                if (ccostElement) {
+                    this.ccostElement = ccostElement;
+                    if (ccteElement.value.length) {
+                        var url = this.ccostsUrl+'parent/'+ccteElement.value;
+                        this.loader.load(url, {}, this.refreshCcostField.bind(this));
+                    } else {
+                        this.clearCcostField(this.ccostElement.disabled);
+                    }
+                }
+            }
+        },
+        reloadCcostField : function(event)
+        {
+            this.reload = true;
+            var ccteElement = Event.element(event);
+            if (ccteElement && ccteElement.id) {
+                var ccostElement  = $(ccteElement.id.replace(/checking_account/, 'cost_center'));
+                if (ccostElement) {
+                    this.ccostElement = ccostElement;
+                    if (ccteElement.value.length) {
+                        var url = this.ccostsUrl+'parent/'+ccteElement.value;
+                        this.loader.load(url, {}, this.refreshCcostField.bind(this));
+                    } else {
+                        this.clearCcostField(this.ccostElement.disabled);
+                    }
+                }
+            }
+        },
+        refreshCcostField : function(serverResponse)
+        {
+            if (serverResponse) {
+                var data = eval('(' + serverResponse + ')');
+                var value = this.ccostElement.value;
+                var disabled = this.ccostElement.disabled;
+                if (data.length) {
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.ccostElement.name);
+                    select.setAttribute('title', this.ccostElement.title);
+                    select.setAttribute('id', this.ccostElement.id);
+                    select.setAttribute('class', 'required-entry select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (this.ccostElement.value &&
+                                (this.ccostElement.value == data[i].value || this.ccostElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    var parentNode = this.ccostElement.parentNode;
+                    var ccostElementId = this.ccostElement.id;
+                    parentNode.innerHTML = select.outerHTML;
+
+                    this.ccostElement = $(ccostElementId);
+                } else if (this.reload) {
+                    this.clearCcostField(disabled);
+                }
+            }
+        },
+        clearCcostField: function(disabled) {
+            var text = document.createElement('input');
+            text.setAttribute('type', 'text');
+            text.setAttribute('name', this.ccostElement.name);
+            text.setAttribute('title', this.ccostElement.title);
+            text.setAttribute('id', this.ccostElement.id);
+            text.setAttribute('class', 'input-text');
+            if (disabled) {
+                text.setAttribute('disabled', '');
+            }
+            var parentNode = this.ccostElement.parentNode;
+            var ccostElementId = this.ccostElement.id;
+            parentNode.innerHTML = text.outerHTML;
+            this.ccostElement = $(ccostElementId);
+        }
+    }
+    spCcObj = new spCcModel();
+
+});
+</script>

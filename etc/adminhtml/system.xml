@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * System configurations
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers">
+            <group id="starkenpro" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Starken</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enabled for Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>This carrier is only available for Chile country</comment>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Title</label>
+                </field>
+                <field id="gateway_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>API URL</label>
+                </field>
+                <field id="password" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>User Token</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="rut" translate="label comment" type="select" sortOrder="52" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>RUT</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\Rut</source_model>
+                    <comment>This list will be fed after saving the configuration the first time, having the shipping method enabled, API URL and User Token fields correctly set.</comment>
+                </field>
+                <field id="checking_account" translate="label comment" type="select" sortOrder="54" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Checking Account</label>
+                    <frontend_class>cctes</frontend_class>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\CheckingAccount</source_model>
+                    <comment>This list will be fed after saving the configuration the first time, having the shipping method enabled, API URL and User Token fields correctly set.</comment>
+                </field>
+                <field id="cost_center" translate="label comment" type="select" sortOrder="57" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Cost Center</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\CostCenter</source_model>
+                    <comment>This list will be fed after saving the configuration the first time, having the shipping method enabled, API URL and User Token fields correctly set.</comment>
+                </field>
+                <field id="commune_origin" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Commune Origin</label>
+                    <frontend_class>communes</frontend_class>
+                    <source_model>SoftwareAgil\StarkenPro\Model\ResourceModel\Address\Attribute\Source\CommuneWithRegion</source_model>
+                    <comment>This list will be fed after saving the configuration the first time, having the shipping method enabled, API URL and User Token fields correctly set.</comment>
+                </field>
+                <field id="agency_origin" translate="label" type="text" sortOrder="59" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Agency Origin</label>
+                    <comment>This list will be fed after saving the configuration the first time, having the shipping method enabled, API URL and User Token fields correctly set.</comment>
+                </field>
+                <field id="allowed_methods" translate="label" type="multiselect" sortOrder="59" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Allowed Methods</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\Option</source_model>
+                    <can_be_empty>0</can_be_empty>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="shipping_guide_notification" translate="label comment" type="select" sortOrder="59" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping Guide - Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <comment>This email notification is sent to customer when freight order is created for a existing order</comment>
+                </field>
+                <field id="package" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Package</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\Package</source_model>
+                </field>
+                <field id="service" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Service</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\Method</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="deliveries" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Deliveries</label>
+                    <source_model>SoftwareAgil\StarkenPro\Model\Source\Delivery</source_model>
+                </field>
+                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Displayed Error Message</label>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable Logs?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Logs are stored in table sa_sp_api_calls_log and can be seen in the API Calls Log section</comment>
+                </field>
+                <field id="debug_log_link" translate="label" type="label" sortOrder="151" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API Calls Log</label>
+                    <frontend_model>SoftwareAgil\StarkenPro\Block\Adminhtml\System\Config\Form\Field\DebugLogLink</frontend_model>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Sort Order</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

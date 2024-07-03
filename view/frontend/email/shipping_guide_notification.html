@@ -1,0 +1,35 @@
+<!--@subject {{trans "Shipment of order #%order_id is on its way" order_id=$order.increment_id}} @-->
+<!--@vars {
+"var order.increment_id":"Order Id",
+"layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"":"Order Items Grid",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours",
+"var order":"Order",
+"var order_id": "Order DB Id",
+"var order_data.customer_name":"Customer Name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
+            <p>
+                {{trans "Your order #%order_id is on its way with tracking number %tracking_number, and you can register it at the following link" order_id=$order.increment_id tracking_number=$tracking_number}}:
+            </p>
+            <p>
+                <a href="{{var tracking_link}}">{{trans "Track"}}</a>
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{layout handle="sales_email_order_shipment_items" shipment_id=$shipment_id order_id=$order_id}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

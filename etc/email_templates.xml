@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Magento/Email/etc/email_templates.xsd">
+    <template id="carriers_starkenpro_shipping_guide_notification" label="Shipping Guide - Email Template" file="shipping_guide_notification.html" type="html" module="SoftwareAgil_StarkenPro" area="frontend" />
+</config>

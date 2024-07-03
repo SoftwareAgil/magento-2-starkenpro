@@ -1,0 +1,307 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'jquery'
+], function ($) {
+    class spDestinyAgencyModel {
+        constructor (options)
+        {
+            this.reload = false;
+            this.agenciesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/communeAgency'))) ?>";
+            this.bindCommuneAgencyRelation();
+            this.lastAgencyId = '';
+        }
+        bindCommuneAgencyRelation ()
+        {
+            var communeElement = $('.form-address-edit #commune_id').first();
+            communeElement.change(this.reloadAgencyField.bind(this));
+            this.initAgencyField(communeElement[0]);
+        }
+        initAgencyField (element)
+        {
+            var communeElement = element;
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $('.form-address-edit #' + communeElement.id.replace(/commune_id/, 'agency_id'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        //this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                        $.ajax({
+                            context: this,
+                            url: url,
+                            type: "POST",
+                            data: {},
+                        }).done(function (data) {
+                            this.refreshAgencyField(data);
+                        });
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        }
+        reloadAgencyField (event)
+        {
+            this.reload = true;
+            var communeElement = event.target;
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $('.form-address-edit #' + communeElement.id.replace(/commune_id/, 'agency_id'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        //this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                        $.ajax({
+                            context: this,
+                            url: url,
+                            type: "POST",
+                            data: {},
+                        }).done(function (data) {
+                            this.refreshAgencyField(data);
+                        });
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        }
+        refreshAgencyField (serverResponse)
+        {
+            if (serverResponse) {
+                var data = serverResponse;
+                var lastValue = this.agencyElement[0].value;
+                var disabled = this.agencyElement.disabled;
+                if (data.length) {
+                    this.lastAgencyId = this.agencyElement.value
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.agencyElement[0].name);
+                    select.setAttribute('title', this.agencyElement[0].title);
+                    select.setAttribute('id', this.agencyElement[0].id);
+                    select.setAttribute('class', 'select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (data[i].value == '') {
+                                option.innerText = '<?php echo __('To send to Agency select an option'); ?>';
+                            }
+                            if (this.agencyElement.value &&
+                                (this.agencyElement.value == data[i].value || this.agencyElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            } else if (lastValue !='' && data[i].value == lastValue) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    if (this.agencyElement.parent() == null) {
+                        this.agencyElement = $('.form-address-edit #' + this.agencyElement.id).first();
+                    }
+
+                    var parentNode = this.agencyElement.parent();
+                    var agencyElementId = "agency_id";
+                    parentNode.html(select.outerHTML);
+
+                    this.agencyElement = $('.form-address-edit #' + agencyElementId).first();
+                } else if (this.reload) {
+                    this.clearAgencyField(disabled);
+                }
+            }
+        }
+        clearAgencyField (disabled) {
+            var agencyElementId = "agency_id";
+            this.agencyElement = $('.form-address-edit #' + agencyElementId).first();
+            var text = document.createElement('input');
+            text.setAttribute('type', 'text');
+            text.setAttribute('name', this.agencyElement[0].name);
+            text.setAttribute('title', this.agencyElement[0].title);
+            text.setAttribute('id', this.agencyElement[0].id);
+            text.setAttribute('class', 'input-text');
+            if (disabled) {
+                text.setAttribute('disabled', '');
+            }
+            var parentNode = this.agencyElement.parent();
+            parentNode.html(text.outerHTML);
+            this.agencyElement = $('.form-address-edit #' + agencyElementId).first();
+        }
+    };
+
+    class spDestinyCommuneModel {
+        constructor (options)
+        {
+            this.reload = false;
+            this.communesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/regionCommune'))) ?>";
+            this.hideAdditionalFields();
+            this.bindRegionCommuneRelation();
+        }
+        bindRegionCommuneRelation ()
+        {
+            var regionElement = $('.form-address-edit #region_id').first();
+            regionElement.change(this.reloadCommuneField.bind(this));
+            this.initCommuneField(regionElement[0]);
+        }
+        initCommuneField (element)
+        {
+            var regionElement = element;
+            if (regionElement && regionElement.id) {
+                var communeElement  = $('.form-address-edit #' + regionElement.id.replace(/region_id/, 'commune_id'));
+                if (communeElement) {
+                    this.communeElement = communeElement;
+                    if (regionElement.value.length) {
+                        var url = this.communesUrl+'parent/'+regionElement.value;
+                        //this.loader.load(url, {}, this.refreshCommuneField.bind(this));
+                        $.ajax({
+                            context: this,
+                            url: url,
+                            type: "POST",
+                            data: {},
+                        }).done(function (data) {
+                            this.refreshCommuneField(data);
+                        });
+                    } else {
+                        this.clearCommuneField(this.communeElement.disabled);
+                    }
+                }
+            }
+        }
+        reloadCommuneField (event)
+        {
+            this.reload = true;
+            var regionElement = event.target;
+            if (regionElement && regionElement.id) {
+                var communeElement  = $('.form-address-edit #' + regionElement.id.replace(/region_id/, 'commune_id'));
+                if (communeElement) {
+                    this.communeElement = communeElement;
+                    if (regionElement.value.length) {
+                        var url = this.communesUrl+'parent/'+regionElement.value;
+                        //this.loader.load(url, {}, this.refreshCommuneField.bind(this));
+                        $.ajax({
+                            context: this,
+                            url: url,
+                            type: "POST",
+                            data: {},
+                        }).done(function (data) {
+                            this.refreshCommuneField(data);
+                        });
+                    } else {
+                        this.clearCommuneField(this.communeElement.disabled);
+                    }
+                }
+            }
+        }
+        refreshCommuneField (serverResponse)
+        {
+            if (serverResponse) {
+                var data = serverResponse;
+                var lastValue = this.communeElement[0].value;
+                var disabled = this.communeElement.disabled;
+                if (data.length) {
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.communeElement[0].name);
+                    select.setAttribute('title', this.communeElement[0].title);
+                    select.setAttribute('id', this.communeElement[0].id);
+                    select.setAttribute('class', 'select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (data[i].value == '') {
+                                option.innerText = '<?php echo __('Please select a commune.'); ?>';
+                            }
+                            if (this.communeElement.value &&
+                                (this.communeElement.value == data[i].value || this.communeElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            } else if (lastValue !='' && data[i].value == lastValue) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    if (this.communeElement.parent() == null) {
+                        this.communeElement = $('.form-address-edit #' + this.communeElement.id).first();
+                    }
+
+                    var parentNode = this.communeElement.parent();
+                    var communeElementId = "commune_id";
+                    parentNode.html(select.outerHTML);
+
+                    this.communeElement = $('.form-address-edit #' + communeElementId);
+
+                    spDestinyAgencyAddress = new spDestinyAgencyModel();
+                    //this.communeElement.change(this.agencyObj.reloadAgencyField.bind(this.agencyObj));
+                    //this.agencyObj.initAgencyField(this.communeElement);
+                } else if (this.reload) {
+                    this.clearCommuneField(disabled);
+                }
+                this.communeElement.change(this.updateAdditionalFields.bind(this));
+            }
+        }
+        clearCommuneField (disabled)
+        {
+            var communeElementId = "commune_id";
+            this.communeElement = $('.form-address-edit #' + communeElementId).first();
+            var select = document.createElement('select');
+            select.setAttribute('name', this.communeElement[0].name);
+            select.setAttribute('title', this.communeElement[0].title);
+            select.setAttribute('id', this.communeElement[0].id);
+            select.setAttribute('class', 'select');
+            if (disabled) {
+                select.setAttribute('disabled', '');
+            }
+            var option = document.createElement('option');
+            option.setAttribute('value', '');
+            option.innerText = '<?php echo __('Please select a commune.'); ?>';
+            select.add(option);
+            var parentNode = this.communeElement.parent();
+            parentNode.html(select.outerHTML);
+        }
+        updateAdditionalFields (event)
+        {
+            var communeElement = event.target;
+            if (communeElement && communeElement.id) {
+                var comSelIndex = communeElement.selectedIndex;
+                var communeText = communeElement.options[comSelIndex].text;
+                $('.form-address-edit #commune').val(communeText);
+                $('.form-address-edit #city').val(communeText);
+            }
+        }
+        hideAdditionalFields ()
+        {
+            $('.form-address-edit .field.city').hide();
+            $('.form-address-edit .field.field-commune').hide();
+            $('.form-address-edit .field.zip').hide();
+        }
+    };
+
+    var spDestinyAgencyAddress = null;
+    var spDestinyCommuneAddress = null;
+    $(document).ready(function(){
+        setTimeout(function(){
+                spDestinyAgencyAddress = new spDestinyAgencyModel();
+                spDestinyCommuneAddress = new spDestinyCommuneModel();
+            }, 3000
+        );
+        $('.form-address-edit .field.city').hide();
+        $('.form-address-edit .field.field-commune').hide();
+        $('.form-address-edit .field.zip').hide();
+    });
+});
+</script>

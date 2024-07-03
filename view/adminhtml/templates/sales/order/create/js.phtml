@@ -1,0 +1,321 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'prototype'
+], function () {
+    var spDestinyAgencyModel = Class.create();
+    spDestinyAgencyModel.prototype = {
+        initialize : function(addressType, childAddress = null, childAddressType = null)
+        {
+            this.reload = false;
+            this.loader = new varienLoader(true);
+            this.agenciesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/communeAgency'))) ?>";
+
+            this.addressType = addressType;
+            this.childAddress = childAddress;
+            this.childAddressType = childAddressType;
+            this.bindCommuneAgencyRelation(this.addressType);
+        },
+        bindCommuneAgencyRelation : function(address)
+        {
+            if (address) {
+                // todo: fix bug in IE
+                var communeElements = $$('#order-' + address +'_commune_id');
+            } else {
+                var communeElements = $$('#order-' + address + ' .communes');
+            }
+            for(var i=0; i<communeElements.size(); i++) {
+                Event.observe(communeElements[i], 'change', this.reloadAgencyField.bind(this));
+                this.initAgencyField(communeElements[i]);
+            }
+        },
+        initAgencyField : function(element)
+        {
+            var communeElement = element;
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $(communeElement.id.replace(/commune_id/, 'agency_id'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        },
+        reloadAgencyField : function(event)
+        {
+            this.reload = true;
+            var communeElement = Event.element(event);
+            if (communeElement && communeElement.id) {
+                var agencyElement  = $(communeElement.id.replace(/commune_id/, 'agency_id'));
+                if (agencyElement) {
+                    this.agencyElement = agencyElement;
+                    if (communeElement.value.length) {
+                        var url = this.agenciesUrl+'parent/'+communeElement.value;
+                        this.loader.load(url, {}, this.refreshAgencyField.bind(this));
+                    } else {
+                        this.clearAgencyField(this.agencyElement.disabled);
+                    }
+                }
+            }
+        },
+        refreshAgencyField : function(serverResponse)
+        {
+            if (serverResponse) {
+                var data = eval('(' + serverResponse + ')');
+                var value = this.agencyElement.value;
+                var disabled = this.agencyElement.disabled;
+                if (data.length) {
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.agencyElement.name);
+                    select.setAttribute('title', this.agencyElement.title);
+                    select.setAttribute('id', this.agencyElement.id);
+                    select.setAttribute('class', 'select admin__control-select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (data[i].value == '') {
+                                option.innerText = '<?php echo __('To send to Agency select an option'); ?>';
+                            }
+                            if (this.agencyElement.value &&
+                                (this.agencyElement.value == data[i].value || this.agencyElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    if (this.agencyElement.parentNode == null) {
+                        this.agencyElement = $(this.agencyElement.id);
+                    }
+
+                    var parentNode = this.agencyElement.parentNode;
+                    var agencyElementId = this.agencyElement.id;
+                    parentNode.innerHTML = select.outerHTML;
+
+                    this.agencyElement = $(agencyElementId);
+                } else if (this.reload) {
+                    this.clearAgencyField(disabled);
+                }
+                if ($('order-shipping_same_as_billing').checked == true && this.childAddress !== null) {
+                    this.childAddress.refreshAgencyField(serverResponse);
+                    this.childAddress.agencyElement.disabled = true;
+                    Event.observe(this.agencyElement, 'change', function(){
+                        $('order-shipping_address_agency_id').selectedIndex = $('order-billing_address_agency_id').selectedIndex;
+                    });
+                }
+            }
+        },
+        clearAgencyField: function(disabled) {
+            var text = document.createElement('input');
+            text.setAttribute('type', 'text');
+            text.setAttribute('name', this.agencyElement.name);
+            text.setAttribute('title', this.agencyElement.title);
+            text.setAttribute('id', this.agencyElement.id);
+            text.setAttribute('class', 'input-text admin__control-text');
+            if (disabled) {
+                text.setAttribute('disabled', '');
+            }
+            var parentNode = this.agencyElement.parentNode;
+            var agencyElementId = this.agencyElement.id;
+            parentNode.innerHTML = text.outerHTML;
+            this.agencyElement = $(agencyElementId);
+        }
+    }
+
+    var spDestinyCommuneModel = Class.create();
+    spDestinyCommuneModel.prototype = {
+        initialize : function(addressType, childAddress = null, childAddressType = null, agencyObj = null)
+        {
+            this.reload = false;
+            this.loader = new varienLoader(true);
+            this.communesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/regionCommune'))) ?>";
+
+            this.addressType = addressType;
+            this.childAddress = childAddress;
+            this.childAddressType = childAddressType;
+            this.agencyObj = agencyObj;
+            this.hideAdditionalFields();
+            this.bindRegionCommuneRelation(this.addressType);
+        },
+        bindRegionCommuneRelation : function(address)
+        {
+            if (address) {
+                // todo: fix bug in IE
+                var regionElements = $$('#order-' + address +'_region_id');
+            } else {
+                var regionElements = $$('#order-' + address + ' .regions');
+            }
+            for(var i=0; i<regionElements.size(); i++) {
+                Event.observe(regionElements[i], 'change', this.reloadCommuneField.bind(this));
+                this.initCommuneField(regionElements[i]);
+            }
+        },
+        initCommuneField : function(element)
+        {
+            var regionElement = element;
+            if (regionElement && regionElement.id) {
+                var communeElement  = $(regionElement.id.replace(/region_id/, 'commune_id'));
+                if (communeElement) {
+                    this.communeElement = communeElement;
+                    if (regionElement.value.length) {
+                        var url = this.communesUrl+'parent/'+regionElement.value;
+                        this.loader.load(url, {}, this.refreshCommuneField.bind(this));
+                    } else {
+                        this.clearCommuneField(this.communeElement.disabled);
+                    }
+                }
+            }
+        },
+        reloadCommuneField : function(event)
+        {
+            this.reload = true;
+            var regionElement = Event.element(event);
+            if (regionElement && regionElement.id) {
+                var communeElement  = $(regionElement.id.replace(/region_id/, 'commune_id'));
+                if (communeElement) {
+                    this.communeElement = communeElement;
+                    if (regionElement.value.length) {
+                        var url = this.communesUrl+'parent/'+regionElement.value;
+                        this.loader.load(url, {}, this.refreshCommuneField.bind(this));
+                    } else {
+                        this.clearCommuneField(this.communeElement.disabled);
+                    }
+                }
+            }
+        },
+        refreshCommuneField : function(serverResponse)
+        {
+            if (serverResponse) {
+                var data = eval('(' + serverResponse + ')');
+                var value = this.communeElement.value;
+                var disabled = this.communeElement.disabled;
+                if (data.length) {
+                    var select = document.createElement('select');
+                    select.setAttribute('name', this.communeElement.name);
+                    select.setAttribute('title', this.communeElement.title);
+                    select.setAttribute('id', this.communeElement.id);
+                    select.setAttribute('class', 'select admin__control-select');
+                    if (disabled) {
+                        select.setAttribute('disabled', '');
+                    }
+                    for (var i in data) {
+                        if (data[i].label) {
+                            var option = document.createElement('option');
+                            option.setAttribute('value', data[i].value);
+                            option.innerText = data[i].label;
+                            if (data[i].value == '') {
+                                option.innerText = '<?php echo __('Please select a commune.'); ?>';
+                            }
+                            if (this.communeElement.value &&
+                                (this.communeElement.value == data[i].value || this.communeElement.value == data[i].label)
+                            ) {
+                                option.setAttribute('selected', '');
+                            }
+                            select.add(option);
+                        }
+                    }
+
+                    if (this.communeElement.parentNode == null) {
+                        this.communeElement = $(this.communeElement.id);
+                    }
+
+                    var parentNode = this.communeElement.parentNode;
+                    var communeElementId = this.communeElement.id;
+                    parentNode.innerHTML = select.outerHTML;
+
+                    this.communeElement = $(communeElementId);
+
+                    Event.observe(this.communeElement, 'change', this.agencyObj.reloadAgencyField.bind(this.agencyObj));
+                    this.agencyObj.initAgencyField(this.communeElement);
+                } else if (this.reload) {
+                    this.clearCommuneField(disabled);
+                }
+                Event.observe(this.communeElement, 'change', this.updateAdditionalFields.bind(this));
+                if ($('order-shipping_same_as_billing').checked == true && this.childAddress !== null) {
+                    this.childAddress.refreshCommuneField(serverResponse);
+                    this.childAddress.communeElement.disabled = true;
+                }
+            }
+        },
+        clearCommuneField: function(disabled) {
+            var select = document.createElement('select');
+            select.setAttribute('name', this.communeElement.name);
+            select.setAttribute('title', this.communeElement.title);
+            select.setAttribute('id', this.communeElement.id);
+            select.setAttribute('class', 'select admin__control-select');
+            if (disabled) {
+                select.setAttribute('disabled', '');
+            }
+            var option = document.createElement('option');
+            option.setAttribute('value', '');
+            option.innerText = '<?php echo __('Please select a commune.'); ?>';
+            select.add(option);
+
+            var parentNode = this.communeElement.parentNode;
+            var communeElementId = this.communeElement.id;
+            parentNode.innerHTML = select.outerHTML;
+        },
+        updateAdditionalFields : function(event)
+        {
+            var communeElement = Event.element(event);
+            if (communeElement && communeElement.id) {
+                var comSelIndex = $('order-' + this.addressType + '_commune_id').selectedIndex;
+                var communeText = $('order-' + this.addressType + '_commune_id').options[comSelIndex].text;
+                $('order-' + this.addressType + '_city').value = communeText;
+                $('order-' + this.addressType + '_commune').value = communeText;
+                if ($('order-shipping_same_as_billing').checked == true && this.childAddress !== null) {
+                    $('order-' + this.childAddressType + '_commune_id').selectedIndex = comSelIndex;
+                    $('order-' + this.childAddressType + '_city').value = communeText;
+                    $('order-' + this.childAddressType + '_commune').value = communeText;
+                }
+            }
+        },
+        hideAdditionalFields : function()
+        {
+            $$('#order-' + this.addressType + '_fields .admin__field.field-city')[0].hide();
+            $$('#order-' + this.addressType + '_fields .admin__field.field-commune')[0].hide();
+            $$('#order-' + this.addressType + '_fields .admin__field.field-postcode')[0].hide();
+        }
+    }
+
+    Ajax.Responders.register({
+        onComplete: function(request, transport) {
+            try {
+                if (request.url.indexOf("loadBlock") != -1 && request.url.indexOf("shipping_address") != -1) {
+                    spDestinyAgencyShippingAddress = new spDestinyAgencyModel('shipping_address');
+                    spDestinyCommuneShippingAddress = new spDestinyCommuneModel('shipping_address', null, null, spDestinyAgencyShippingAddress);
+                }
+                if (request.url.indexOf("loadBlock") != -1 && request.url.indexOf("header") != -1) {
+                    setTimeout(function(){
+                            spDestinyAgencyShippingAddress = new spDestinyAgencyModel('shipping_address');
+                            spDestinyAgencyAddress = new spDestinyAgencyModel('billing_address', spDestinyAgencyShippingAddress, 'shipping_address');
+                            spDestinyCommuneShippingAddress = new spDestinyCommuneModel('shipping_address', null, null, spDestinyAgencyShippingAddress);
+                            spDestinyCommuneAddress = new spDestinyCommuneModel('billing_address', spDestinyCommuneShippingAddress, 'shipping_address', spDestinyAgencyAddress);
+                        }, 4000
+                    );
+                }
+            } catch {}
+        }
+    });
+
+    spDestinyAgencyShippingAddress = new spDestinyAgencyModel('shipping_address');
+    spDestinyAgencyAddress = new spDestinyAgencyModel('billing_address', spDestinyAgencyShippingAddress, 'shipping_address');
+    spDestinyCommuneShippingAddress = new spDestinyCommuneModel('shipping_address', null, null, spDestinyAgencyShippingAddress);
+    spDestinyCommuneAddress = new spDestinyCommuneModel('billing_address', spDestinyCommuneShippingAddress, 'shipping_address', spDestinyAgencyAddress);
+});
+</script>

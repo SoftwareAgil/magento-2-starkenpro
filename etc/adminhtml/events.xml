@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Admin events
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="admin_system_config_changed_section_carriers">
+        <observer name="admin_connector_sa_sp_api_credentials" instance="SoftwareAgil\StarkenPro\Observer\Adminhtml\ApiValidate" />
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="sa_sp_sales_order_shipment_save_after" instance="SoftwareAgil\StarkenPro\Observer\Adminhtml\ShipmentSaveAfter" />
+    </event>
+    <event name="controller_action_predispatch_adminhtml_order_shipment_massPrintShippingLabel">
+        <observer name="sa_sp_controller_action_predispatch_shipment_massPrintShippingLabel" instance="SoftwareAgil\StarkenPro\Observer\Adminhtml\MassPrintShippingLabel" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_view">
+        <observer name="sa_sp_controller_action_predispatch_sales_order_view" instance="SoftwareAgil\StarkenPro\Observer\Adminhtml\SalesOrderView" />
+    </event>
+</config>

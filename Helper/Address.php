@@ -1,0 +1,41 @@
+<?php
+/**
+ * Customer Address helper
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+
+/**
+ * Customer Data Helper
+ *
+ */
+namespace SoftwareAgil\StarkenPro\Helper;
+
+class Address extends \SoftwareAgil\StarkenPro\Helper\CustomAttributeBase
+{
+    /**
+     * Default attribute entity type code
+     *
+     * @return string
+     */
+    protected function _getEntityTypeCode()
+    {
+        return 'customer_address';
+    }
+
+    /**
+     * Return available customer address attribute form as select options
+     *
+     * @return array
+     */
+    public function getAttributeFormOptions()
+    {
+        return [
+            ['label' => __('Customer Address Registration'), 'value' => 'customer_register_address'],
+            ['label' => __('Customer Account Address'), 'value' => 'customer_address_edit']
+        ];
+    }
+}

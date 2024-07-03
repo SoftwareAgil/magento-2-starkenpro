@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Module ACL configurations
+ *
+ * @category     SoftwareAgil
+ * @package      SoftwareAgil_StarkenPro
+ * @author       SoftwareAgil (info@softwareagil.com)
+ * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="SoftwareAgil_StarkenPro::starkenpro" title="Starken">
+                            <resource id="SoftwareAgil_StarkenPro::log" title="API Calls Log"/>
+                            <resource id="SoftwareAgil_StarkenPro::configuration" title="Configuration"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

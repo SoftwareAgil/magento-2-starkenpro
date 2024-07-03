@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php if (!$block->isStarkenPro() || !$block->getSaSpTrackingContent()) return; ?>
+<section class="block block-order-details-view sp-tracking-info-ctn">
+    <div class="block-title" style="margin-bottom: 0px;">
+        <strong><?php /* @escapeNotVerified */ echo __('Shipment Information') ?></strong>
+    </div>
+    <div class="block-content">
+        <?php if ($block->getShipment()->getId()) { ?>
+            <?php if ($block->getShipment()->getSaSpFreightOrder()) {  ?>
+                <h3 class="title"><?php /* @escapeNotVerified */ echo __('Freight Order')." ".$block->getShipment()->getSaSpFreightOrder(); ?></h3>
+            <?php } ?>
+        <?php } ?>
+        <h3 class="title"><?php /* @escapeNotVerified */ echo __('Tracking History'); ?></h3>
+        <table class="data-table admin__table-primary" id="shipment-tracking-table">
+            <thead>
+            <tr class="headings">
+                <?php $i = 0;
+                $columns = $block->getColumns();
+                $lastItemNumber = count($columns) ?>
+                <?php foreach ($columns as $columnName => $columnTitle) : ?>
+                    <?php $i++; ?>
+                    <th class="col-<?= $block->escapeHtmlAttr($columnName) ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $block->escapeHtml($columnTitle) ?></span></th>
+                <?php endforeach; ?>
+            </tr>
+            </thead>
+            <tbody>
+                <?php $_items = $block->getItems();?>
+                <?php $i = 0; foreach ($_items as $_item) : ?>
+                <?php $i++; ?>
+                <tr class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
+                    <?php foreach (array_keys($_item) as $_field) : ?>
+                        <td class="col-<?php echo $_field; ?>"><?php echo $_item[$_field]; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</section>

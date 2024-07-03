@@ -1,0 +1,31 @@
+{
+    "name": "softwareagil/magento-2-starkenpro",
+    "description": "Magento 2 starkenpro integration",
+    "keywords": [
+        "magento 2",
+        "magento",
+        "starkenpro"
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "type": "magento2-module",
+    "version": "1.0.12",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [
+        {
+            "name":"SoftwareAgil"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "SoftwareAgil\\StarkenPro\\": ""
+        }
+    }
+}

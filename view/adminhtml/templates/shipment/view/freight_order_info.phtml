@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php if (!$block->isStarkenPro()) return; ?>
+<style>
+    .admin__page-section-item.order-shipping-method #linkId{
+        display: none;
+    }
+</style>
+<section class="admin__page-section sp-freight-order-info-ctn">
+    <div class="admin__page-section-title">
+        <span class="title" style="text-transform: uppercase;"><?php /* @escapeNotVerified */ echo __('Starken')." - ".__('Freight Order Info') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <?php if ($block->getShipment()->getId()) { ?>
+            <?php if ($block->getShipment()->getSaSpFreightOrder()) {  ?>
+                <h3 class="title"><?php /* @escapeNotVerified */ echo __('Freight Order')." ".$block->getShipment()->getSaSpFreightOrder(); ?></h3>
+            <?php } ?>
+        <?php
+                if ($block->getShipment()->getShippingLabel()) {
+                    $dataTemp['shipment_id'] = $block->getShipment()->getId();
+                    $slUrl = $block->getUrl('adminhtml/order_shipment/printLabel', $dataTemp);
+                    ?>
+                    <button id="id_psl" title="<?php echo __('Print Shipping Label'); ?>" type="button" class="action-default scalable" onclick="setLocation('<?php echo $slUrl; ?>')" data-ui-id="widget-button-0">
+                        <span><?php echo __('Print Shipping Label'); ?></span>
+                    </button>
+                    <?php
+                }
+            }
+        ?>
+        <table class="data-table admin__table-primary" id="shipment-freight-order-table">
+            <tbody>
+            <tr>
+                <td class="col-1">
+                    <?php $_items = $block->getItemsCol1();?>
+                    <?php foreach ($_items as $_k => $_v) : ?>
+                        <strong><?php echo $_k; ?></strong>:<br />
+                        <?php echo $_v; ?><br />
+                    <?php endforeach; ?>
+                </td>
+                <td class="col-2">
+                    <?php $_items = $block->getItemsCol2();?>
+                    <?php foreach ($_items as $_k => $_v) : ?>
+                        <strong><?php echo $_k; ?></strong>:<br />
+                        <?php echo $_v; ?><br />
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
