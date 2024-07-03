@@ -17,7 +17,8 @@
     ],
     "authors": [
         {
-            "name":"SoftwareAgil"
+            "name":"SoftwareAgil",
+            "email":"equiposwa@gmail.com"
         }
     ],
     "autoload": {
