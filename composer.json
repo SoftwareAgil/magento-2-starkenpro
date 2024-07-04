@@ -28,11 +28,5 @@
         "psr-4": {
             "SoftwareAgil\\StarkenPro\\": ""
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://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@github.com/SoftwareAgil/magento-2-starkenpro.git"
-        }
-    ]
+    }
 }
