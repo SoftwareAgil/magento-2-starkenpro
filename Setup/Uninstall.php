@@ -66,8 +66,8 @@ class Uninstall implements UninstallInterface
             ['code', 'default_name'],
             \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         );
-        if ($connection->isIndexExists('directory_country_region', $indexdcr)) {
-            $connection->dropIndex('directory_country_region', $indexdcr);
+        if ($setup->getConnection()->isIndexExists('directory_country_region', $indexdcr)) {
+            $setup->getConnection()->dropIndex('directory_country_region', $indexdcr);
         }
         //--Remove Index - directory_country_region
         
