@@ -61,14 +61,14 @@ class Uninstall implements UninstallInterface
         }
         //--Remove columns - customer_address_entity
         //--Remove Index - directory_country_region
-        $indexdcr = $setup->getIdxName(
-            $setup->getTable('directory_country_region'),
-            ['code', 'default_name'],
-            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-        );
-        if ($setup->getConnection()->isIndexExists('directory_country_region', $indexdcr)) {
-            $setup->getConnection()->dropIndex('directory_country_region', $indexdcr);
-        }
+        // $indexdcr = $setup->getIdxName(
+        //     $setup->getTable('directory_country_region'),
+        //     ['code', 'default_name'],
+        //     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        // );
+        // if ($setup->getConnection()->isIndexExists('directory_country_region', $indexdcr)) {
+        //     $setup->getConnection()->dropIndex('directory_country_region', $indexdcr);
+        // }
         //--Remove Index - directory_country_region
         
         $setup->endSetup();
