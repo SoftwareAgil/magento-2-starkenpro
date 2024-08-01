@@ -66,7 +66,7 @@ class Rut extends Generic
     function getRutDv($r){
         $s = 1;
         for($m = 0; $r != 0; $r /= 10) {
-            $s = ($s + $r % 10 * (9 - $m++ % 6)) % 11;
+            $s = ((int)$s + (int)$r % 10 * (9 - (int)$m++ % 6)) % 11;
         }
 
         return chr($s ? $s + 47 : 75);

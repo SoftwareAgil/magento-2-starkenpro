@@ -11,7 +11,7 @@ namespace SoftwareAgil\StarkenPro\Model\ApiConnector;
 
 use SoftwareAgil\StarkenPro\Helper\Data;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Backend\App\Action\Context;
 
@@ -21,27 +21,27 @@ use Magento\Backend\App\Action\Context;
 class Client
 {
     /**
-     * @var \SoftwareAgil\StarkenPro\Helper\Data
+     * @var Data
      */
     private $_helper;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var Curl
      */
     private $_clientFactory;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $_json;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var Context
      */
     private $_context;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     private $_messageManager;
 
@@ -58,17 +58,17 @@ class Client
     /**
      * Test constructor.
      *
-     * @param \SoftwareAgil\StarkenPro\Helper\Data $helperData
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
-     * @param \Magento\Framework\Serialize\Serializer\Json $json
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param Data $helperData
+     * @param ReinitableConfigInterface $config
+     * @param Curl $clientFactory
+     * @param Json $json
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
         Data $helperData,
         ReinitableConfigInterface $config,
-        ZendClientFactory $clientFactory,
+        Curl $clientFactory,
         Json $json,
         Context $context,
         array $data = []
@@ -147,24 +147,23 @@ class Client
     {
         try {
             $result = ['success' => false];
-            $url = $this->getEndPointBase().'/'.$action;
-            //$this->_helper->log(['request' => ['endpoint' => $url, 'method' => $method, 'payload' => $payload]]);
-            $client = $this->getHttpClient()->create();
-            $client->setUri($url);
-            $client->setMethod($method);
-            $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-            $client->setHeaders('accept', 'application/json');
-            $client->setHeaders('Authorization', 'Bearer '.$this->getApiToken());
-            if (count($payload)) {
-                $client->setHeaders('Content-Type', 'application/json');
-                $client->setRawData($this->_json->serialize($payload));
+            $url = $this->getEndPointBase() . '/' . $action;
+            $headers = [
+                'accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->getApiToken()
+            ];
+            $this->_clientFactory->setHeaders($headers);
+            $this->_clientFactory->setOption(CURLOPT_MAXREDIRS, 0);
+            $this->_clientFactory->setOption(CURLOPT_TIMEOUT, 30);
+            if (strtoupper($method) == 'GET') {
+                $this->_clientFactory->get($url, $payload);
+            } else {
+                $this->_clientFactory->post($url, $payload);
             }
-            $response = $client->request();
-            $responseBody = $response->getBody();
-
-            $responseBodyArray = $this->_json->unserialize($responseBody);
+            $response = $this->_clientFactory->getBody();
+            $responseBodyArray = $this->_json->unserialize($response);
             $this->_helper->log(['raw_response' => $responseBodyArray]);
-            if ($response->getStatus() == 200 || $response->getStatus() == 201) {
+            if ($this->_clientFactory->getStatus() == 200 || $this->_clientFactory->getStatus() == 201) {
                 if (isset($responseBodyArray['status']) && $responseBodyArray['status'] != "500") {
                     $result['success'] = true;
                     if (is_array($responseBodyArray)) {
@@ -187,7 +186,7 @@ class Client
                     $result['code'] = $responseBodyArray['statusCode'];
                 }
             }
-            $this->_helper->apiCallLog($action, $response->getStatus(), $this->_json->serialize($payload), $responseBody);
+            $this->_helper->apiCallLog($action, $this->_clientFactory->getStatus(), $this->_json->serialize($payload), $response);
         } catch (\Exception $e) {
             $result['error'] = __("Starken Pro")." : ".__($e->getMessage())->getText();
             $result['code'] = $e->getCode();
