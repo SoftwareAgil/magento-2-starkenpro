@@ -978,7 +978,11 @@ class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier imp
                     $shipment->setSaSpFreightOrderContent($this->_json->serialize($response['items']));
                     $shipment->save();
                     if ($response['items']['orden_flete']) {
-                        $this->sendTrackingNotification($order, $shipment->getId(), $response['items']['orden_flete']);
+                        try {
+                            $this->sendTrackingNotification($order, $shipment->getId(), $response['items']['orden_flete']);
+                        } catch (Exception $e) {
+                            $this->_messageManager->addErrorMessage(__('Error sending email notification. Please make sure that sending emails is enabled.'));
+                        }
                     }
                 } else {
                     unset($response['success']);
