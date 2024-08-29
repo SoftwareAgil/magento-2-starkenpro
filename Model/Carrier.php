@@ -68,7 +68,7 @@ class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier imp
     protected $_json;
 
     /**
-     * @var Data
+     * @var HelperData
      */
     protected $_helper;
 
@@ -146,7 +146,7 @@ class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier imp
      * @param Data $pricingHelper
      * @param CacheInterface $cache
      * @param Json $json
-     * @param Data $helperData
+     * @param HelperData $helperData
      * @param ScopeConfigInterface $scopeConfig
      * @param ProductRepositoryInterface $productRepository
      * @param State $state
@@ -773,7 +773,7 @@ class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier imp
             $this->_helper->log('Shipping rates recovered from cache');
         }
 
-        if (!$response['success']) {
+        if (isset($response['success']) && !$response['success']) {
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier($this->_code);
             $error->setCarrierTitle($this->getConfigData('title'));

@@ -14,7 +14,7 @@ namespace SoftwareAgil\StarkenPro\Helper;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomAttributeBase extends \Magento\Framework\App\Helper\AbstractHelper
+class CustomAttributeBase
 {
     /**
      * Array of User Defined attribute codes per entity type code
@@ -45,33 +45,30 @@ class CustomAttributeBase extends \Magento\Framework\App\Helper\AbstractHelper
     protected $filterManager;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
+     * @var \SoftwareAgil\StarkenPro\Model\File\Validator\NotProtectedExtension
      */
     private $extensionValidator;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|null $extensionValidator
+     * @param \SoftwareAgil\StarkenPro\Model\File\Validator\NotProtectedExtension|null $extensionValidator
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null
+        \SoftwareAgil\StarkenPro\Model\File\Validator\NotProtectedExtension $extensionValidator = null
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_localeDate = $localeDate;
         $this->filterManager = $filterManager;
-        parent::__construct($context);
         $this->extensionValidator = $extensionValidator
             ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class);
+                ->get(\SoftwareAgil\StarkenPro\Model\File\Validator\NotProtectedExtension::class);
     }
 
     /**

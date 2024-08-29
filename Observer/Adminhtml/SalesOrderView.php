@@ -10,7 +10,7 @@
 namespace SoftwareAgil\StarkenPro\Observer\Adminhtml;
 
 use SoftwareAgil\StarkenPro\Helper\Data;
-use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Sales\Model\OrderRepository;
 
 /**
@@ -24,12 +24,12 @@ class SalesOrderView implements \Magento\Framework\Event\ObserverInterface
     private $_helper;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactoryInterface
      */
     private $_carrierFactory;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var OrderRepository
      */
     private $_orderRepository;
 
@@ -37,12 +37,12 @@ class SalesOrderView implements \Magento\Framework\Event\ObserverInterface
      * ApiValidate constructor.
      *
      * @param \SoftwareAgil\StarkenPro\Helper\Data $helperData
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param \Magento\Sales\Model\OrderRepository $orderRepository
      */
     public function __construct(
         Data $helperData,
-        CarrierFactory $carrierFactory,
+        CarrierFactoryInterface $carrierFactory,
         \Magento\Sales\Model\OrderRepository $orderRepository
     ) {
         $this->_helper         = $helperData;
@@ -61,7 +61,7 @@ class SalesOrderView implements \Magento\Framework\Event\ObserverInterface
         $orderId = $request->getParam('order_id');
         if ($orderId) {
             $order = $this->_orderRepository->get($orderId);
-            $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
+            $shipmentCarrier = $this->_carrierFactory->get($order->getShippingMethod(true)->getCarrierCode());
             if ($shipmentCarrier->getCarrierCode() != "starkenpro") return $this;
             $shipmentCarrier->updateShipTrackingInfo($order);
         }

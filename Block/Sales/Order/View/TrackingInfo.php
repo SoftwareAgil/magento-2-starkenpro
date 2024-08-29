@@ -56,7 +56,7 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve order model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
     {
@@ -90,7 +90,7 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
      */
     public function getSaSpTrackingContent()
     {
-        return $this->getShipment()->getSaSpTrackingContent();
+        return $this->getShipment()->getData('sa_sp_tracking_content');
     }
 
     /**
@@ -114,8 +114,8 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
     public function getItems()
     {
         $items = [];
-        if ($this->getShipment()->getSaSpTrackingContent()) {
-            $arrayTemp = $this->_json->unserialize($this->getShipment()->getSaSpTrackingContent());
+        if ($this->getShipment()->getData('sa_sp_tracking_content')) {
+            $arrayTemp = $this->_json->unserialize($this->getShipment()->getData('sa_sp_tracking_content'));
             if (isset($arrayTemp["history"])) {
                 foreach ($arrayTemp["history"] as $event) {
                     $items[] = [

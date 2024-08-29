@@ -93,6 +93,6 @@ class Multiline extends \SoftwareAgil\StarkenPro\Block\Form\Renderer\AbstractRen
             $value = '';
         }
 
-        return $this->escapeHtml($this->_applyOutputFilter($value));
+        return $this->_scaper->escapeHtml($this->_applyOutputFilter($value));
     }
 }

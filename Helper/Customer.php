@@ -25,27 +25,25 @@ class Customer extends \SoftwareAgil\StarkenPro\Helper\CustomAttributeBase
     /**
      * Input validator
      *
-     * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator $_inputValidator
+     * @var \SoftwareAgil\StarkenPro\Model\Adminhtml\System\Config\Source\Inputtype\Validator $_inputValidator
      */
     protected $_inputValidator;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param Data $dataHelper
-     * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator $inputValidator
+     * @param \SoftwareAgil\StarkenPro\Model\Adminhtml\System\Config\Source\Inputtype\Validator $inputValidator
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Filter\FilterManager $filterManager,
         Data $dataHelper,
-        \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator $inputValidator
+        \SoftwareAgil\StarkenPro\Model\Adminhtml\System\Config\Source\Inputtype\Validator $inputValidator
     ) {
-        parent::__construct($context, $eavConfig, $localeDate, $filterManager);
+        parent::__construct($eavConfig, $localeDate, $filterManager);
         $this->_dataHelper = $dataHelper;
         $this->_inputValidator = $inputValidator;
     }

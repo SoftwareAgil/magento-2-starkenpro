@@ -25,16 +25,6 @@ class DebugLogLink extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
-    {
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
-        return parent::render($element);
-    }
-
-
-    /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return sprintf(

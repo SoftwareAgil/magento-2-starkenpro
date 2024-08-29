@@ -66,17 +66,17 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
     private $_regionFactory;
 
     /**
-     * @var \Magento\Directory\Model\CommuneFactory
+     * @var CommuneFactory
      */
     private $_communeFactory;
 
     /**
-     * @var \Magento\Directory\Model\AgencyFactory
+     * @var AgencyFactory
      */
     private $_agencyFactory;
 
     /**
-     * @var \Magento\Directory\Model\AccountFactory
+     * @var AccountFactory
      */
     private $_accountFactory;
 
@@ -288,29 +288,31 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
                             continue;
                         }
                         $communeObj = $this->_communeFactory->create();
-                        $communeObj
-                            ->setSpCommuneId($commune['code_dls'])
-                            ->setRegionId($regionId)
-                            ->setCityId($city['code_dls'])
-                            ->setName($commune['name'])
+                        $communeObj->setData([
+                                'sp_commune_id' => $commune['code_dls'],
+                                'region_id' => $regionId,
+                                'city_id' => $commune['code_dls'],
+                                'name' => $commune['name']
+                            ])
                             ->isObjectNew(true);
                         $communeObj->save();
-                        $addedCommunes[] = $communeObj->getSpCommuneId();
+                        $addedCommunes[] = $communeObj->getData('sp_commune_id');
                         foreach($commune['agencies'] as $agency) {
                             if (in_array($agency['code_dls'], $addedAgencies)) {
                                 continue;
                             }
                             $agencyObj = $this->_agencyFactory->create();
-                            $agencyObj
-                                ->setSpAgencyId($agency['code_dls'])
-                                ->setName($agency['name'])
-                                ->setCommuneId($commune['code_dls'])
-                                ->setAddress($agency['address'])
-                                ->setLatitude($agency['latitude'])
-                                ->setLongitude($agency['longitude'])
+                            $agencyObj->setData([
+                                    'sp_agency_id' => $agency['code_dls'],
+                                    'name' => $agency['name'],
+                                    'commune_id' => $agency['code_dls'],
+                                    'address' => $agency['address'],
+                                    'latitude' => $agency['latitude'],
+                                    'longitude' => $agency['longitude']
+                                ])
                                 ->isObjectNew(true);
                             $agencyObj->save();
-                            $addedAgencies[] = $agencyObj->getSpAgencyId();
+                            $addedAgencies[] = $agencyObj->getData('sp_agency_id');
                         }
                     }
                 }

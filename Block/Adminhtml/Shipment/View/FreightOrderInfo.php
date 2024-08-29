@@ -114,7 +114,7 @@ class FreightOrderInfo extends \Magento\Backend\Block\Template
     /**
      * Retrieve order model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
     {
@@ -144,11 +144,11 @@ class FreightOrderInfo extends \Magento\Backend\Block\Template
     /**
      * Retrieve Shipment Tracking Content
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return string|null
      */
     public function getSaSpFreightOrderContent()
     {
-        return $this->getShipment()->getSaSpFreightOrderContent();
+        return $this->getShipment()->getData('sa_sp_freight_order_content');
     }
 
     /**
@@ -174,12 +174,12 @@ class FreightOrderInfo extends \Magento\Backend\Block\Template
     {
         $items = [];
         $arrayTemp = [];
-        if ($this->getShipment()->getSaSpTrackingContent()) {
-            $arrayTemp = $this->_json->unserialize($this->getShipment()->getSaSpTrackingContent());
+        if ($this->getShipment()->getData('sa_sp_tracking')) {
+            $arrayTemp = $this->_json->unserialize($this->getShipment()->getData('sa_sp_tracking'));
         }
         $array2Temp = [];
-        if ($this->getShipment()->getSaSpFreightOrderContent()) {
-            $array2Temp = $this->_json->unserialize($this->getShipment()->getSaSpFreightOrderContent());
+        if ($this->getShipment()->getData('sa_sp_freight_order_content')) {
+            $array2Temp = $this->_json->unserialize($this->getShipment()->getData('sa_sp_freight_order_content'));
         }
         foreach ($this->_column1Fields as $k => $v) {
             $kArray = explode(".", $k);
@@ -226,11 +226,11 @@ class FreightOrderInfo extends \Magento\Backend\Block\Template
         $items = [];
         $foArray = [];
         $tArray = [];
-        if ($this->getShipment()->getSaSpFreightOrderContent()) {
-            $foArray = $this->_json->unserialize($this->getShipment()->getSaSpFreightOrderContent());
+        if ($this->getShipment()->getData('sa_sp_freight_order_content')) {
+            $foArray = $this->_json->unserialize($this->getShipment()->getData('sa_sp_freight_order_content'));
         }
-        if ($this->getShipment()->getSaSpTrackingContent()) {
-            $tArray = $this->_json->unserialize($this->getShipment()->getSaSpTrackingContent());
+        if ($this->getShipment()->getData('sa_sp_tracking')) {
+            $tArray = $this->_json->unserialize($this->getShipment()->getData('sa_sp_tracking'));
         }
         foreach ($this->_column2Fields as $k => $v) {
             $kArray = explode(".", $k);

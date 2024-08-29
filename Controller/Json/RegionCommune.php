@@ -6,8 +6,27 @@
  */
 namespace SoftwareAgil\StarkenPro\Controller\Json;
 
-class RegionCommune extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultInterface;
+use SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection;
+
+class RegionCommune implements ActionInterface, HttpPostActionInterface,HttpGetActionInterface
 {
+    public function __construct(
+        protected PageFactory $resultPageFactory,
+        protected Json $jsonHelper,
+        protected RequestInterface $_request,
+        protected ResponseInterface $_response,
+        protected Collection $collection
+    ) {
+    }
+
     /**
      * Return JSON-encoded array of commune agencies
      *
@@ -17,11 +36,9 @@ class RegionCommune extends \Magento\Framework\App\Action\Action
     {
         $arrRes = [];
 
-        $regionId = $this->getRequest()->getParam('parent');
+        $regionId = $this->_request->getParam('parent');
         if (!empty($regionId)) {
-            $arrCommunes = $this->_objectManager->create(
-                \SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection::class
-            )->addRegionFilter(
+            $arrCommunes = $this->collection->addRegionFilter(
                 $regionId
             )->load()->toOptionArray();
 
@@ -31,8 +48,8 @@ class RegionCommune extends \Magento\Framework\App\Action\Action
                 }
             }
         }
-        $this->getResponse()->representJson(
-            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($arrRes)
+        $this->_response->representJson(
+            $this->jsonHelper->serialize($arrRes)
         );
     }
 }

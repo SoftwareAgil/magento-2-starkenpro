@@ -80,7 +80,7 @@ class FormBase extends \Magento\Framework\View\Element\Template
     protected $_fieldNameFormat = '%1$s';
 
     /**
-     * @var \Magento\Framework\Data\Collection\ModelFactory
+     * @var \SoftwareAgil\StarkenPro\Model\Data\Collection\ModelFactory
      */
     protected $_modelFactory;
 
@@ -96,14 +96,14 @@ class FormBase extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Data\Collection\ModelFactory $modelFactory
+     * @param \SoftwareAgil\StarkenPro\Model\Data\Collection\ModelFactory $modelFactory
      * @param \Magento\Eav\Model\Form\Factory $formFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Data\Collection\ModelFactory $modelFactory,
+        \SoftwareAgil\StarkenPro\Model\Data\Collection\ModelFactory $modelFactory,
         \Magento\Eav\Model\Form\Factory $formFactory,
         \Magento\Eav\Model\Config $eavConfig,
         array $data = []

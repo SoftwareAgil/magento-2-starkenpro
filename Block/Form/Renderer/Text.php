@@ -24,7 +24,7 @@ class Text extends \SoftwareAgil\StarkenPro\Block\Form\Renderer\AbstractRenderer
      */
     public function getEscapedValue()
     {
-        return $this->escapeHtml($this->_applyOutputFilter($this->getValue()));
+        return $this->_scaper->escapeHtml($this->_applyOutputFilter($this->getValue()));
     }
 
     /**

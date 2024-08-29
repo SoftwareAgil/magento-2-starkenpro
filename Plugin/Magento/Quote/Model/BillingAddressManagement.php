@@ -14,7 +14,7 @@ class BillingAddressManagement
     /**
      * @param \Magento\Quote\Model\BillingAddressManagement $subject
      * @param $cartId
-     * \Magento\Quote\Api\Data\AddressInterface $address
+     * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return array
      */
     public function beforeAssign(

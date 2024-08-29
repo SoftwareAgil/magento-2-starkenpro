@@ -47,7 +47,7 @@ class File extends \SoftwareAgil\StarkenPro\Block\Form\Renderer\AbstractRenderer
     public function getEscapedValue()
     {
         if ($this->getValue()) {
-            return $this->escapeHtml($this->urlEncoder->encode($this->getValue()));
+            return $this->_scaper->escapeHtml($this->urlEncoder->encode($this->getValue()));
         }
         return '';
     }

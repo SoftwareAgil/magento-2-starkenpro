@@ -10,7 +10,7 @@
 namespace SoftwareAgil\StarkenPro\Observer\Adminhtml;
 
 use SoftwareAgil\StarkenPro\Helper\Data;
-use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\CarrierFactoryInterface;
 
 /**
  * Shipment Save After to create shipping label.
@@ -23,7 +23,7 @@ class ShipmentSaveAfter implements \Magento\Framework\Event\ObserverInterface
     private $_helper;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var \Magento\Shipping\Model\CarrierFactoryInterface
      */
     private $_carrierFactory;
 
@@ -31,11 +31,11 @@ class ShipmentSaveAfter implements \Magento\Framework\Event\ObserverInterface
      * ApiValidate constructor.
      *
      * @param \SoftwareAgil\StarkenPro\Helper\Data $helperData
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      */
     public function __construct(
         Data $helperData,
-        CarrierFactory $carrierFactory
+        CarrierFactoryInterface $carrierFactory
     ) {
         $this->_helper         = $helperData;
         $this->_carrierFactory = $carrierFactory;
@@ -52,7 +52,7 @@ class ShipmentSaveAfter implements \Magento\Framework\Event\ObserverInterface
         if ($shipment->getSaSpShippingLabelId()) return $this;
         if ($shipment->getGeneratingShippingLabel()) return $this;
         $order = $shipment->getOrder();
-        $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
+        $shipmentCarrier = $this->_carrierFactory->get($order->getShippingMethod(true)->getCarrierCode());
         if ($shipmentCarrier->getCarrierCode() != "starkenpro") return $this;
         $shipmentCarrier->setGeneratingShippingLabel(true);
         $shipmentCarrier->generateShippingLabelId($shipment);

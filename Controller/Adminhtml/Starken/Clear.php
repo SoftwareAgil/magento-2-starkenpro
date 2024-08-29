@@ -65,11 +65,11 @@ class Clear extends Action
         $collection = $this->collectionLog->create();
         try {
             $collection->clearLog();
-            $this->messageManager->addSuccess(__('Records older than a month have been removed'));
+            $this->messageManager->addSuccessMessage(__('Records older than a month have been removed'));
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong.'));
         }
 
         return $resultRedirect->setPath('*/*/log');

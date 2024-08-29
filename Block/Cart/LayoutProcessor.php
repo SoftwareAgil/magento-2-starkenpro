@@ -9,10 +9,15 @@
  */
 namespace SoftwareAgil\StarkenPro\Block\Cart;
 
+/**
+ * LayoutProcessor class
+ *
+ * @api
+ */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
-     * @var \Magento\Checkout\Block\Checkout\AttributeMerger
+     * @var \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger
      */
     protected $_merger;
 
@@ -22,12 +27,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $_communeCollection;
 
     /**
-     * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
+     * @param \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger $merger
      * @param \SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection $communeCollection
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
+        \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger $merger,
         \SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection $communeCollection
     ) {
         $this->_merger = $merger;

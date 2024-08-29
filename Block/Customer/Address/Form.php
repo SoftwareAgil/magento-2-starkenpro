@@ -45,7 +45,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Data\Collection\ModelFactory $modelFactory
+     * @param \SoftwareAgil\StarkenPro\Model\Data\Collection\ModelFactory $modelFactory
      * @param \Magento\Eav\Model\Form\Factory $formFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
@@ -54,7 +54,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Data\Collection\ModelFactory $modelFactory,
+        \SoftwareAgil\StarkenPro\Model\Data\Collection\ModelFactory $modelFactory,
         \Magento\Eav\Model\Form\Factory $formFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
@@ -79,7 +79,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
      *
      * @var string
      */
-    protected $_formModelPath = \Magento\Customer\Model\Form::class;
+    protected $_formModelPath = 'Magento\Customer\Model\Form';
 
     /**
      * Returns (and initiates) metadata form.
@@ -99,18 +99,6 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
     }
 
     /**
-     * Return whether the form should be opened in an expanded mode showing the change password fields
-     *
-     * @return bool
-     *
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getChangePassword()
-    {
-        return $this->_customerSession->getChangePassword();
-    }
-
-    /**
      * Return Entity object
      *
      * @return \Magento\Framework\Model\AbstractModel
@@ -118,15 +106,14 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
     public function getEntity()
     {
         if ($this->_entity === null && $this->_entityModelClass) {
-            /** @var Address|Customer $entity */
             $entity = $this->_modelFactory->create($this->_entityModelClass);
             /** @var EntityType $entityType */
-            $entityType = $entity->getEntityType();
+            $entityType = $entity->getData('entity_type');
             $entityId = $this->getCurrentEntityId($entityType);
             if ($entityId) {
                 $entity->load($entityId);
                 if ($entityType->getEntityTypeCode() === AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-                    if ($entity->getCustomerId() != $this->_customerSession->getCustomerId()) {
+                    if ($entity->getData('customer_id') != $this->_customerSession->getCustomerId()) {
                         $entity = $this->_modelFactory->create(
                             $this->_entityModelClass
                         );

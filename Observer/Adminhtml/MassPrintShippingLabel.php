@@ -10,7 +10,7 @@
 namespace SoftwareAgil\StarkenPro\Observer\Adminhtml;
 
 use SoftwareAgil\StarkenPro\Helper\Data;
-use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Sales\Model\OrderRepository;
 
 /**
@@ -19,17 +19,17 @@ use Magento\Sales\Model\OrderRepository;
 class MassPrintShippingLabel implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \SoftwareAgil\StarkenPro\Helper\Data
+     * @var Data
      */
     private $_helper;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactoryInterface
      */
     private $_carrierFactory;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var OrderRepository
      */
     private $_orderRepository;
 
@@ -42,7 +42,7 @@ class MassPrintShippingLabel implements \Magento\Framework\Event\ObserverInterfa
      */
     public function __construct(
         Data $helperData,
-        CarrierFactory $carrierFactory,
+        CarrierFactoryInterface $carrierFactory,
         \Magento\Sales\Model\OrderRepository $orderRepository
     ) {
         $this->_helper         = $helperData;
@@ -61,7 +61,7 @@ class MassPrintShippingLabel implements \Magento\Framework\Event\ObserverInterfa
         $selectedOrders = (array)$request->getParam('selected');
         foreach ($selectedOrders as $oi) {
             $order = $this->_orderRepository->get($oi);
-            $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
+            $shipmentCarrier = $this->_carrierFactory->get($order->getShippingMethod(true)->getCarrierCode());
             if ($shipmentCarrier->getCarrierCode() != "starkenpro") continue;
             $shipmentCarrier->generateShippingLabel($order);
         }

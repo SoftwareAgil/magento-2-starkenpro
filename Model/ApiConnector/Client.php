@@ -127,7 +127,7 @@ class Client
     /**
      * Get HTTP client.
      *
-     * @return \Magento\Framework\HTTP\ZendClientFactory
+     * @return Curl
      */
     public function getHttpClient()
     {

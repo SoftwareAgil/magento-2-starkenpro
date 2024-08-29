@@ -41,7 +41,7 @@ class Date extends \SoftwareAgil\StarkenPro\Block\Form\Renderer\AbstractRenderer
     /**
      * Date element instance
      *
-     * @var \Magento\Framework\View\Element\Html\Date
+     * @var \SoftwareAgil\StarkenPro\Block\Form\Renderer\Element\Html\Date
      */
     protected $dateElement;
 
@@ -49,12 +49,12 @@ class Date extends \SoftwareAgil\StarkenPro\Block\Form\Renderer\AbstractRenderer
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param \SoftwareAgil\StarkenPro\Block\Form\Renderer\Element\Html\Date $dateElement
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\View\Element\Html\Date $dateElement,
+        \SoftwareAgil\StarkenPro\Block\Form\Renderer\Element\Html\Date $dateElement,
         array $data = []
     ) {
         parent::__construct($context, $data);

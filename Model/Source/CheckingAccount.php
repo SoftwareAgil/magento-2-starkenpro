@@ -24,12 +24,12 @@ class CheckingAccount extends Generic
     protected $code = 'rut';
 
     /**
-     * @var \Magento\Directory\Model\AccountFactory
+     * @var AccountFactory
      */
     private $_accountFactory;
 
     /**
-     * @param \Magento\Directory\Model\AccountFactory $accountFactory
+     * @param AccountFactory $accountFactory
      */
     public function __construct(
         AccountFactory $accountFactory

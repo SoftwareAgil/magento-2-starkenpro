@@ -13,7 +13,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 {
 
     /**
-     * @var \Magento\Checkout\Block\Checkout\AttributeMerger
+     * @var \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger
      */
     protected $_merger;
 
@@ -28,13 +28,13 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $_agencyCollection;
 
     /**
-     * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
+     * @param \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger $merger
      * @param \SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection $communeCollection
      * @param \SoftwareAgil\StarkenPro\Model\ResourceModel\Agency\Collection $communeCollection
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
+        \SoftwareAgil\StarkenPro\Block\Checkout\AttributeMerger $merger,
         \SoftwareAgil\StarkenPro\Model\ResourceModel\Commune\Collection $communeCollection,
         \SoftwareAgil\StarkenPro\Model\ResourceModel\Agency\Collection $agencyCollection
     ) {

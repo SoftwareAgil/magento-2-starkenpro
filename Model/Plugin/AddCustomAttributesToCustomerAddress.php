@@ -7,7 +7,6 @@
  * @author       SoftwareAgil (info@softwareagil.com)
  * @copyright    Copyright (c) 2020 SoftwareAgil (www.softwareagil.com)
  */
-
 declare(strict_types=1);
 
 namespace SoftwareAgil\StarkenPro\Model\Plugin;
@@ -21,7 +20,7 @@ use Magento\Framework\Api\AttributeValue;
 class AddCustomAttributesToCustomerAddress
 {
     /**
-     * @var \Magento\CustomerCustomAttributes\Helper\Data
+     * @var \SoftwareAgil\StarkenPro\Helper\CustomAttribute
      */
     private $customerData;
 

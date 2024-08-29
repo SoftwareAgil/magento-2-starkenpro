@@ -12,8 +12,6 @@ namespace SoftwareAgil\StarkenPro\Model\ResourceModel;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class Log
@@ -21,25 +19,6 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
  */
 class Log extends AbstractDb
 {
-    /**
-     * @var DateTime
-     */
-    protected $date;
-
-    /**
-     * Log constructor.
-     *
-     * @param DateTime $date
-     * @param Context $context
-     */
-    public function __construct(
-        DateTime $date,
-        Context $context
-    ) {
-        $this->date = $date;
-        parent::__construct($context);
-    }
-
     /**
      * @inheritdoc
      */
@@ -54,7 +33,7 @@ class Log extends AbstractDb
     protected function _beforeSave(AbstractModel $object)
     {
         if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->date->date());
+            $object->setData('created_at', date('Y-m-d H:i:s'));
         }
 
         return parent::_beforeSave($object);

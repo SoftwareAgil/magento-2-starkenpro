@@ -6,8 +6,27 @@
  */
 namespace SoftwareAgil\StarkenPro\Controller\Adminhtml\Json;
 
-class CcteCcost extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultInterface;
+use SoftwareAgil\StarkenPro\Model\ResourceModel\Account\Collection;
+
+class CcteCcost implements ActionInterface, HttpPostActionInterface, HttpGetActionInterface
 {
+    public function __construct(
+        protected PageFactory $resultPageFactory,
+        protected Json $jsonHelper,
+        protected RequestInterface $_request,
+        protected ResponseInterface $_response,
+        protected Collection $collection
+    ) {
+    }
+
     /**
      * Return JSON-encoded array of ccte cost centers
      *
@@ -17,11 +36,9 @@ class CcteCcost extends \Magento\Backend\App\Action
     {
         $arrRes = [];
 
-        $ccteId = $this->getRequest()->getParam('parent');
+        $ccteId = $this->_request->getParam('parent');
         if (!empty($ccteId)) {
-            $arrCctes = $this->_objectManager->create(
-                \SoftwareAgil\StarkenPro\Model\ResourceModel\Account\Collection::class
-            )->addCcteFilter(
+            $arrCctes = $this->collection->addCcteFilter(
                 $ccteId
             )->load()->toOptionArray();
 
@@ -31,8 +48,9 @@ class CcteCcost extends \Magento\Backend\App\Action
                 }
             }
         }
-        $this->getResponse()->representJson(
-            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($arrRes)
+        
+        return $this->_response->representJson(
+            $this->jsonHelper->serialize($arrRes)
         );
     }
 }

@@ -22,10 +22,10 @@ class ToOrderAddress
         \Magento\Sales\Api\Data\OrderAddressInterface $orderAddress,
         \Magento\Quote\Model\Quote\Address $object
     ) {
-        $orderAddress->setCommuneId($object->getCommuneId());
-        $orderAddress->setCommune($object->getCommune());
-        $orderAddress->setRut($object->getRut());
-        $orderAddress->setAgencyId($object->getAgencyId());
+        $orderAddress->setCommuneId($object->getData('commune_id'));
+        $orderAddress->setCommune($object->getData('commune'));
+        $orderAddress->setRut($object->getData('rut'));
+        $orderAddress->setAgencyId($object->getData('agency_id'));
         return $orderAddress;
     }
 }

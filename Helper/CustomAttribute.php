@@ -36,7 +36,6 @@ class CustomAttribute extends \SoftwareAgil\StarkenPro\Helper\CustomAttributeBas
     private static $allowLengthValidationTypes = ['text', 'multiline'];
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -44,7 +43,6 @@ class CustomAttribute extends \SoftwareAgil\StarkenPro\Helper\CustomAttributeBas
      * @param Customer $customerCustomer
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Filter\FilterManager $filterManager,
@@ -53,7 +51,7 @@ class CustomAttribute extends \SoftwareAgil\StarkenPro\Helper\CustomAttributeBas
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_customerCustomer = $customerCustomer;
-        parent::__construct($context, $eavConfig, $localeDate, $filterManager);
+        parent::__construct($eavConfig, $localeDate, $filterManager);
     }
 
     /**

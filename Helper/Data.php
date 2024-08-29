@@ -9,19 +9,17 @@
  */
 namespace SoftwareAgil\StarkenPro\Helper;
 
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use SoftwareAgil\StarkenPro\Model\LogFactory;
 
 /**
  * Usps data helper
  */
-class Data extends AbstractHelper
+class Data
 {
     /**
      * @constant
@@ -64,11 +62,6 @@ class Data extends AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
-     */
-    protected $_clientFactory;
-
-    /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     private $_encryptor;
@@ -84,30 +77,25 @@ class Data extends AbstractHelper
     ];
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param LogFactory $logFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      */
     public function __construct(
-        Context $context,
         LoggerInterface $logger,
         LogFactory $logFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        ZendClientFactory $clientFactory,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        protected RequestInterface $_request
     ) {
         $this->_logger = $logger;
         $this->_logFactory   = $logFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
-        $this->_clientFactory = $clientFactory;
         $this->_encryptor = $encryptor;
-        parent::__construct($context);
     }
 
     /**
@@ -121,7 +109,7 @@ class Data extends AbstractHelper
      */
     public function getWebsiteConfig($path, $website = 0, $scope = \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
     {
-        return $this->scopeConfig->getValue(
+        return $this->_scopeConfig->getValue(
             $path,
             $scope,
             $website
@@ -194,7 +182,7 @@ class Data extends AbstractHelper
      */
     public function isEnabled()
     {
-        return $this->scopeConfig->isSetFlag(
+        return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_CARRIER_ENABLED
         );
     }
@@ -206,7 +194,7 @@ class Data extends AbstractHelper
      */
     public function isDebugEnabled()
     {
-        return $this->scopeConfig->isSetFlag(
+        return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_DEBUG_ENABLED
         );
     }
