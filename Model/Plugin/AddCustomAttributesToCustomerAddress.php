@@ -13,6 +13,7 @@ namespace SoftwareAgil\StarkenPro\Model\Plugin;
 
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeValue;
+use SoftwareAgil\StarkenPro\Model\Session;
 
 /**
  * Plugin for converting customer address custom attributes
@@ -25,20 +26,20 @@ class AddCustomAttributesToCustomerAddress
     private $customerData;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
-    protected $_customerSession;
+    protected $_saSession;
 
     /**
      * @param \Magento\CustomerCustomAttributes\Helper\Data $customerData
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session $customerSession
      */
     public function __construct(
         \SoftwareAgil\StarkenPro\Helper\CustomAttribute $customerData,
-        \Magento\Customer\Model\Session $customerSession
+        Session $customerSession
     ) {
         $this->customerData = $customerData;
-        $this->_customerSession = $customerSession;
+        $this->_saSession = $customerSession;
     }
 
     /**
@@ -55,10 +56,10 @@ class AddCustomAttributesToCustomerAddress
         $values = $customerAddress->getCustomAttributes();
 
         $valuesInSession = [];
-        $valuesInSession["commune_id"] = $this->_customerSession->getSaCommuneId();
-        $valuesInSession["commune"] = $this->_customerSession->getSaCommune();
-        $valuesInSession["rut"] = $this->_customerSession->getSaRut();
-        $valuesInSession["agency_id"] = $this->_customerSession->getSaAgencyId();
+        $valuesInSession["commune_id"] = $this->_saSession->getSaCommuneId();
+        $valuesInSession["commune"] = $this->_saSession->getSaCommune();
+        $valuesInSession["rut"] = $this->_saSession->getSaRut();
+        $valuesInSession["agency_id"] = $this->_saSession->getSaAgencyId();
 
         foreach ($attributes as $attribute) {
             if (!isset($values[$attribute])) {

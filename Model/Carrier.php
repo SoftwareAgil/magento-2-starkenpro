@@ -33,6 +33,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Session\SessionManagerInterface;
 
 class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface

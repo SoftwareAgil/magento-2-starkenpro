@@ -12,12 +12,13 @@ namespace SoftwareAgil\StarkenPro\Block\Checkout;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
-use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use SoftwareAgil\StarkenPro\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Fields block attribute merger.
@@ -80,15 +81,12 @@ class AttributeMerger
 
     public function __construct(
         protected AddressHelper $saAddressHelper,
-        protected Session $saCustomerSession,
+        protected CustomerSession $saCustomerSession,
+        protected Session $saSession,
         protected CustomerRepository $saCustomerRepository,
         protected DirectoryHelper $saDirectoryHelper,
         protected ?AllowedCountries $saAllowedCountryReader = null
     ) {
-        $this->saAddressHelper = $saAddressHelper;
-        $this->saCustomerSession = $saCustomerSession;
-        $this->saCustomerRepository = $saCustomerRepository;
-        $this->saDirectoryHelper = $saDirectoryHelper;
         $this->saTopCountryCodes = $saDirectoryHelper->getTopCountryCodes();
         $this->saAllowedCountryReader =
             $saAllowedCountryReader ?: ObjectManager::getInstance()->get(AllowedCountries::class);
@@ -358,7 +356,7 @@ class AttributeMerger
     {
         if (!$this->customer) {
             if ($this->saCustomerSession->isLoggedIn()) {
-                $this->customer = $this->saCustomerRepository->getById($this->saCustomerSession->getSaCustomerId());
+                $this->customer = $this->saCustomerRepository->getById($this->saCustomerSession->getCustomerId());
             } else {
                 return null;
             }

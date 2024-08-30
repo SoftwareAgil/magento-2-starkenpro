@@ -48,7 +48,7 @@ class CommuneAgency implements ActionInterface, HttpPostActionInterface, HttpGet
                 }
             }
         }
-        
+
         return $this->_response->representJson(
             $this->jsonHelper->serialize($arrRes)
         );

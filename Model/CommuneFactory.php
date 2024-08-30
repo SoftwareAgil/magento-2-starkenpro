@@ -28,7 +28,7 @@ class CommuneFactory
      * Create new country model
      *
      * @param array $arguments
-     * @return \Magento\Directory\Model\Country
+     * @return \SoftwareAgil\StarkenPro\Model\Commune
      */
     public function create(array $arguments = [])
     {

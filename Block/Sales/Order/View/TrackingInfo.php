@@ -9,15 +9,14 @@
  */
 namespace SoftwareAgil\StarkenPro\Block\Sales\Order\View;
 
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
+
 class TrackingInfo extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry = null;
-
     /**
      * Columns
      *
@@ -30,19 +29,21 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
      */
     protected $_json;
 
+    protected $_current_order;
+
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Serialize\Serializer\Json $json
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
         \Magento\Framework\Serialize\Serializer\Json $json,
+        protected OrderRepositoryInterface $orderRepository,
+        protected ShipmentRepositoryInterface $orderShipmentRepository,
+        protected MessageManagerInterface $messageManager,
         array $data = []
     ) {
-        $this->_coreRegistry = $registry;
         $this->_json = $json;
         $this->_columns = [
             'status' => __('Status'),
@@ -60,12 +61,15 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
      */
     public function getOrder()
     {
-        $order = $this->_coreRegistry->registry('current_order');
-        if (!$order) {
-            $shipment = $this->_coreRegistry->registry('current_shipment');
-            $order = $shipment->getOrder();
+        if (is_null($this->_current_order)) {
+            $this->_current_order = $this->_initOrder();
+            if (!$this->_current_order) {
+                $shipment = $this->_initOrderShipment();
+                $this->_current_order = $shipment->getOrder();
+            }
         }
-        return $order;
+
+        return $this->_current_order;
     }
 
     /**
@@ -138,5 +142,47 @@ class TrackingInfo extends \Magento\Framework\View\Element\Template
     public function getColumns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * Initialize order model instance
+     *
+     * @return OrderInterface|false
+     */
+    protected function _initOrder()
+    {
+        $id = $this->getRequest()->getParam('order_id');
+        try {
+            $order = $this->orderRepository->get($id);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
+            return false;
+        } catch (InputException $e) {
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
+            return false;
+        }
+
+        return $order;
+    }
+
+    /**
+     * Initialize order shipment model instance
+     *
+     * @return OrderInterface|false
+     */
+    protected function _initOrderShipment()
+    {
+        $id = $this->getRequest()->getParam('shipment_id');
+        try {
+            $orderShipment = $this->orderShipmentRepository->get($id);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
+            return false;
+        } catch (InputException $e) {
+            $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
+            return false;
+        }
+
+        return $orderShipment;
     }
 }

@@ -21,6 +21,8 @@ class Validator extends InArray
      */
     protected $_saEavData = null;
 
+    protected $saMessageTemplates;
+
     /**
      * @param \SoftwareAgil\StarkenPro\Helper\Eav $eavData
      * @codeCoverageIgnore

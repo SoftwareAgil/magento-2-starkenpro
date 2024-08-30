@@ -96,7 +96,7 @@ abstract class AbstractRenderer extends \Magento\Framework\View\Element\Template
      */
     protected function _getFormFilter()
     {
-        $filterCode = $this->getAttributeObject()->getInputFilter();
+        $filterCode = $this->getAttributeObject()->getData('input_filter');
         if ($filterCode) {
             $filterClass = 'Magento\\Framework\\Data\\Form\\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {

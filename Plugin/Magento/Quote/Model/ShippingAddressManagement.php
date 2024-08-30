@@ -9,23 +9,16 @@
  */
 namespace SoftwareAgil\StarkenPro\Plugin\Magento\Quote\Model;
 
+use SoftwareAgil\StarkenPro\Model\Session;
+
 class ShippingAddressManagement
 {
-
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-
-    /**
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session $customerSession
      */
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession
-    )
-    {
-        $this->_customerSession = $customerSession;
+        protected Session $_saSession
+    ) {
     }
 
     /**
@@ -46,10 +39,10 @@ class ShippingAddressManagement
                 $address->setCommune($extAttributes->getCommune());
                 $address->setRut($extAttributes->getRut());
                 $address->setAgencyId($extAttributes->getAgencyId());
-                $this->_customerSession->setSaCommuneId($extAttributes->getCommuneId());
-                $this->_customerSession->setSaCommune($extAttributes->getCommune());
-                $this->_customerSession->setSaRut($extAttributes->getRut());
-                $this->_customerSession->setSaAgencyId($extAttributes->getAgencyId());
+                $this->_saSession->setSaCommuneId($extAttributes->getCommuneId());
+                $this->_saSession->setSaCommune($extAttributes->getCommune());
+                $this->_saSession->setSaRut($extAttributes->getRut());
+                $this->_saSession->setSaAgencyId($extAttributes->getAgencyId());
             } catch (\Exception $e) {
             }
         }

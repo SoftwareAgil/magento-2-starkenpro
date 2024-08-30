@@ -17,7 +17,9 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\RegionFactory;
 use SoftwareAgil\StarkenPro\Model\CommuneFactory;
+use SoftwareAgil\StarkenPro\Model\ResourceModel\Commune as ResourceModelCommune;
 use SoftwareAgil\StarkenPro\Model\AgencyFactory;
+use SoftwareAgil\StarkenPro\Model\ResourceModel\Agency as ResourceModelAgency;
 use SoftwareAgil\StarkenPro\Model\AccountFactory;
 
 /**
@@ -111,7 +113,9 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
         RegionFactory $regionFactory,
         CommuneFactory $communeFactory,
         AgencyFactory $agencyFactory,
-        AccountFactory $accountFactory
+        AccountFactory $accountFactory,
+        protected ResourceModelCommune $resourceCommune,
+        protected ResourceModelAgency $resourceAgency,
     ) {
         $this->_client         = $client;
         $this->_helper         = $helperData;
@@ -295,7 +299,7 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
                                 'name' => $commune['name']
                             ])
                             ->isObjectNew(true);
-                        $communeObj->save();
+                        $this->resourceCommune->save($communeObj);
                         $addedCommunes[] = $communeObj->getData('sp_commune_id');
                         foreach($commune['agencies'] as $agency) {
                             if (in_array($agency['code_dls'], $addedAgencies)) {
@@ -311,7 +315,7 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
                                     'longitude' => $agency['longitude']
                                 ])
                                 ->isObjectNew(true);
-                            $agencyObj->save();
+                            $this->resourceAgency->save($agencyObj);
                             $addedAgencies[] = $agencyObj->getData('sp_agency_id');
                         }
                     }

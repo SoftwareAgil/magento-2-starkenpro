@@ -28,25 +28,6 @@ use Magento\Store\Model\Store;
 class Log extends AbstractModel
 {
     /**
-     * Log constructor.
-     *
-     * @param Context $context
-     * @param Registry $registry
-     * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        Registry $registry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
-        array $data = []
-    ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
      * @return void
      */
     public function _construct()

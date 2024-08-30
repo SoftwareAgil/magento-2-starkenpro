@@ -60,4 +60,14 @@
             <argument name="resourceModel" xsi:type="string">SoftwareAgil\StarkenPro\Model\ResourceModel\Log</argument>
         </arguments>
     </virtualType>
+    <virtualType name="SoftwareAgil\StarkenPro\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">sa_sp</argument>
+        </arguments>
+    </virtualType>
+    <type name="SoftwareAgil\StarkenPro\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">SoftwareAgil\StarkenPro\Model\Session\Storage</argument>
+        </arguments>
+    </type>
 </config>

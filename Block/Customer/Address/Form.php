@@ -15,12 +15,10 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
 
 /**
  * Customer Dynamic attributes Form Block
- *
- * @method CustomerInterface getObject()
- * @method Form setObject(CustomerInterface $customer)
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -39,7 +37,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
     protected $_metadataFormFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
@@ -49,7 +47,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
      * @param \Magento\Eav\Model\Form\Factory $formFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session $customerSession
      * @param array $data
      */
     public function __construct(
@@ -58,7 +56,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
         \Magento\Eav\Model\Form\Factory $formFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
-        \Magento\Customer\Model\Session $customerSession,
+        Session $customerSession,
         array $data = []
     ) {
         parent::__construct($context, $modelFactory, $formFactory, $eavConfig, $data);

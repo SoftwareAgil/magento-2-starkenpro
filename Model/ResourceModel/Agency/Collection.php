@@ -113,7 +113,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'title' => 'name',
             'commune_id' => 'commune_id',
         ];
-
         foreach ($this as $item) {
             $option = [];
             foreach ($propertyMap as $code => $field) {

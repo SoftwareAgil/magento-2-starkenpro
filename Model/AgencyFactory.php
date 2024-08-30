@@ -28,7 +28,7 @@ class AgencyFactory
      * Create new country model
      *
      * @param array $arguments
-     * @return \Magento\Directory\Model\Country
+     * @return \SoftwareAgil\StarkenPro\Model\Agency
      */
     public function create(array $arguments = [])
     {
