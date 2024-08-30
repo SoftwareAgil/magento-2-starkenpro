@@ -305,7 +305,7 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
                             $agencyObj->setData([
                                     'sp_agency_id' => $agency['code_dls'],
                                     'name' => $agency['name'],
-                                    'commune_id' => $agency['code_dls'],
+                                    'commune_id' => $commune['code_dls'],
                                     'address' => $agency['address'],
                                     'latitude' => $agency['latitude'],
                                     'longitude' => $agency['longitude']
