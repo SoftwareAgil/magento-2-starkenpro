@@ -295,7 +295,7 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
                         $communeObj->setData([
                                 'sp_commune_id' => $commune['code_dls'],
                                 'region_id' => $regionId,
-                                'city_id' => $commune['code_dls'],
+                                'city_id' => $city['code_dls'],
                                 'name' => $commune['name']
                             ])
                             ->isObjectNew(true);

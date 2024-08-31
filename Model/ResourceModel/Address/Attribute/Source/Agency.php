@@ -48,4 +48,59 @@ class Agency extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     {
         return $this->_agencyFactory->create();
     }
+
+    /**
+     * Get a text for option value
+     *
+     * @param string|integer $value
+     * @return array|string|bool
+     */
+    public function getOptionText($value)
+    {
+        $isMultiple = false;
+        if (is_string($value) && strpos($value, ',') !== false) {
+            $isMultiple = true;
+            $value = explode(',', $value);
+        }
+
+        $options = $this->getSpecificOptions($value, false);
+
+        if ($isMultiple) {
+            $values = [];
+            foreach ($options as $item) {
+                if (in_array($item['value'], $value)) {
+                    $values[] = $item['label'];
+                }
+            }
+            return $values;
+        }
+
+        foreach ($options as $item) {
+            if ($item['value'] == $value) {
+                return $item['label'];
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve Option values array by ids
+     *
+     * @param string|array $ids
+     * @param bool $withEmpty Add empty option to array
+     * @return array
+     */
+    public function getSpecificOptions($ids, $withEmpty = true)
+    {
+        $options = [];
+        $idsArr = (array)$ids;
+        $allOptions = $this->getAllOptions(false);
+        foreach($allOptions as $elm) {
+            if (in_array($elm['value'], $idsArr)) {
+                $options[] = $elm;
+            }
+        }
+
+        return $options;
+    }
 }
