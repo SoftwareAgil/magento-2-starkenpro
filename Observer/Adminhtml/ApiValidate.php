@@ -388,41 +388,50 @@ class ApiValidate implements \Magento\Framework\Event\ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $groups = $this->_context->getRequest()->getPost('groups');
-
-        if (!$groups['starkenpro']['fields']['active']['value']) {
+        $isActive = false;
+        if (isset($groups['starkenpro']['fields']['active']['value'])) {
+            $isActive = $groups['starkenpro']['fields']['active']['value'];
+        }
+        if (!$isActive && isset($groups['starkenpro']['fields']['active']['inherit'])) {
+            $isActive = $groups['starkenpro']['fields']['active']['inherit'];
+        }
+        if (!$isActive) {
             return $this;
         }
 
-        if (isset($groups['starkenpro']['fields']['password']['inherit'])) {
-            $this->_messageManager->addWarningMessage(__('Invalid API User Token.'));
-            return $this;
+        $userToken = false;
+        if (isset($groups['starkenpro']['fields']['password']['value'])) {
+            $userToken = $groups['starkenpro']['fields']['password']['value'];
+        }
+        if (!trim($userToken)) {
+            if (isset($groups['starkenpro']['fields']['password']['inherit'])) {
+                $userToken = $groups['starkenpro']['fields']['password']['inherit'];
+            } else {
+                $this->_messageManager->addWarningMessage(__('Invalid API User Token.'));
+                return $this;
+            }
         }
 
-        if (!$groups['starkenpro']['fields']['password']['value']) {
-            $this->_messageManager->addWarningMessage(__('Invalid API User Token.'));
-            return $this;
+        $apiEndpoint = false;
+        $userToken = false;
+        if (isset($groups['starkenpro']['fields']['gateway_url']['value'])) {
+            $apiEndpoint = $groups['starkenpro']['fields']['gateway_url']['value'];
+        }
+        if (!trim($apiEndpoint)) {
+            if (isset($groups['starkenpro']['fields']['gateway_url']['inherit'])) {
+                $apiEndpoint = $groups['starkenpro']['fields']['gateway_url']['inherit'];
+            } else {
+                $this->_messageManager->addWarningMessage(__('Invalid API URL.'));
+                return $this;
+            }
         }
 
-        $website = $this->_helper->getWebsiteForSelectedScopeInAdmin();
-        $apiEndpoint = "";
-        if (isset($groups['starkenpro']['fields']['gateway_url']['inherit'])) {
-            $apiEndpoint = $this->_helper->getApiUrlFromBackend($website);
-        }
-        if (!$apiEndpoint) {
-            $apiEndpoint = isset($groups['starkenpro']['fields']['gateway_url']['value'])
-                ? $groups['starkenpro']['fields']['gateway_url']['value'] : false;
-        }
-        if (!$apiEndpoint) {
-            $this->_messageManager->addWarningMessage(__('Invalid API URL.'));
-            return $this;
-        }
-
-        $this->_apiPassword = isset($groups['starkenpro']['fields']['password']['value'])
-            ? $groups['starkenpro']['fields']['password']['value'] : false;
+        $this->_apiPassword = $userToken;
 
         //Clear config cache
         $this->_reinitableConfig->reinit();
 
+        $website = $this->_helper->getWebsiteForSelectedScopeInAdmin();
         $this->_apiPassword = $this->_helper->getApiPasswordFromBackend($website);
 
         if (!$this->_client->validateConnection($apiEndpoint, $this->_apiPassword)) return $this;
