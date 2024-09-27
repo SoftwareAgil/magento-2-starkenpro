@@ -107,7 +107,7 @@ class Form extends \SoftwareAgil\StarkenPro\Block\Customer\Address\FormBase
             $entity = $this->_modelFactory->create($this->_entityModelClass);
             /** @var EntityType $entityType */
             $entityType = $entity->getData('entity_type');
-            $entityId = $this->getCurrentEntityId($entityType);
+            $entityId = isset($entityType) ? $this->getCurrentEntityId($entityType) : false;
             if ($entityId) {
                 $entity->load($entityId);
                 if ($entityType->getEntityTypeCode() === AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {

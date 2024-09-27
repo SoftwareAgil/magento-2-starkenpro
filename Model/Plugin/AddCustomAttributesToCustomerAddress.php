@@ -67,13 +67,13 @@ class AddCustomAttributesToCustomerAddress
             }
             if (!empty($values[$attribute]) && !($values[$attribute] instanceof AttributeInterface)) {
                 $valueTemp = $values[$attribute];
-                if ($valuesInSession[$attribute]) {
+                if (isset($valuesInSession[$attribute])) {
                     $valueTemp = $valuesInSession[$attribute];
                 }
                 $customerAddress->setCustomAttribute($attribute, $valueTemp);
             } elseif ($values[$attribute] instanceof AttributeInterface) {
                 $valueTemp = $values[$attribute]->getValue();
-                if ($valuesInSession[$attribute]) {
+                if (isset($valuesInSession[$attribute])) {
                     $valueTemp = $valuesInSession[$attribute];
                 }
                 $customerAddress->setCustomAttribute($attribute, $valueTemp);
