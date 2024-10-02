@@ -15,6 +15,10 @@ require([
             this.agenciesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/communeAgency'))) ?>";
             this.bindCommuneAgencyRelation();
             this.lastAgencyId = '';
+            let saPrevAgencyId = $('#sa_prev_agency_id');
+            if (saPrevAgencyId.length > 0) {
+                this.lastAgencyId = saPrevAgencyId.val();
+            }
         }
         bindCommuneAgencyRelation ()
         {
@@ -76,6 +80,9 @@ require([
             if (serverResponse) {
                 var data = serverResponse;
                 var lastValue = this.agencyElement[0].value;
+                if (lastValue == '') {
+                    lastValue = this.lastAgencyId;
+                }
                 var disabled = this.agencyElement.disabled;
                 if (data.length) {
                     this.lastAgencyId = this.agencyElement.value
@@ -145,6 +152,11 @@ require([
             this.communesUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('starkenpro/json/regionCommune'))) ?>";
             this.hideAdditionalFields();
             this.bindRegionCommuneRelation();
+            this.lastCommuneId = '';
+            let saPrevCommuneId = $('#sa_prev_commune_id');
+            if (saPrevCommuneId.length > 0) {
+                this.lastCommuneId = saPrevCommuneId.val();
+            }
         }
         bindRegionCommuneRelation ()
         {
@@ -206,6 +218,9 @@ require([
             if (serverResponse) {
                 var data = serverResponse;
                 var lastValue = this.communeElement[0].value;
+                if (lastValue == '') {
+                    lastValue = this.lastCommuneId;
+                }
                 var disabled = this.communeElement.disabled;
                 if (data.length) {
                     var select = document.createElement('select');
@@ -302,6 +317,12 @@ require([
         $('.form-address-edit .field.city').hide();
         $('.form-address-edit .field.field-commune').hide();
         $('.form-address-edit .field.zip').hide();
+        let saPrevRut = $('#sa_prev_rut');
+        let saRut = $('#rut');
+        if (saPrevRut.length > 0 && saRut.length > 0) {
+            saRut.val(saPrevRut.val());
+            saRut.addClass('validate-cl-rut');
+        }
     });
 });
 </script>

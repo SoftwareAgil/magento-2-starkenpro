@@ -21,7 +21,7 @@
 ?>
 <?php if ($block->hasUserDefinedAttributes()): ?>
     <?php if ($block->isShowContainer()): ?>
-    <fieldset class="fieldset">
+    <fieldset class="fieldset custom-attributes">
     <?php endif;?>
     <?php foreach ($block->getUserDefinedAttributes() as $attribute):?>
         <?php $attributeContent = $block->getAttributeHtml($attribute);?>

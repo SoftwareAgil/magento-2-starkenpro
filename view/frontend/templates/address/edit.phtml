@@ -186,6 +186,9 @@
             </a>
         </div>
     </div>
+    <?php foreach ($block->getAddress()->getCustomAttributes() as $ca) : ?>
+        <input type="hidden" name="sa_prev_<?= $ca->getAttributeCode() ?>" id="sa_prev_<?= $ca->getAttributeCode() ?>" value="<?= $ca->getValue() ?>" />
+    <?php endforeach; ?>
 </form>
 <script type="text/x-magento-init">
     {
