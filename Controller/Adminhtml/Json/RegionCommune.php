@@ -48,7 +48,7 @@ class RegionCommune implements ActionInterface, HttpPostActionInterface,HttpGetA
                 }
             }
         }
-        
+
         return $this->_response->representJson(
             $this->jsonHelper->serialize($arrRes)
         );

@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var \SoftwareAgil\StarkenPro\Block\Adminhtml\Directory\Commune $block */
+?>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        window.saSpCommunesUrl = '<?= $block->getBackendUrl('starkenpro/json/regionCommune') ?>';
+        window.saSpAgenciesUrl = '<?= $block->getBackendUrl('starkenpro/json/communeAgency') ?>';
+    });
+</script>

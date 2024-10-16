@@ -1,0 +1,19 @@
+//General
+&when (@media-common = true) {
+    .customer-index-edit {
+        .entry-edit {
+            div[data-index="city"], div[data-index="commune"] {
+                display: none !important;
+            }
+        }
+    }
+    .sales-order-address {
+        .field-city, .field-commune {
+            display: none !important;
+        }
+    }
+ }
+
+//Mobile
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+}
