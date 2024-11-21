@@ -663,7 +663,7 @@ class Carrier extends \SoftwareAgil\StarkenPro\Model\Carrier\AbstractCarrier imp
             "encargos" => [
                 [
                     "tipo_encargo" => ($volumeAcum <= 2250 && $weightAcum <= 0.3) ? 'SOBRE' : 'BULTO',
-                    "descripcion" => implode(", ", $packageContent),
+                    "descripcion" => 'Pedido: ' . $order->getIncrementId() . ' // ' . implode(", ", $packageContent),
                     "kilos" => $weightAcum,
                     "alto" => $dimension1,
                     "ancho" => $dimension2,

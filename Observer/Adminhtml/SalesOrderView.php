@@ -62,7 +62,15 @@ class SalesOrderView implements \Magento\Framework\Event\ObserverInterface
         if ($orderId) {
             $order = $this->_orderRepository->get($orderId);
             $shipmentCarrier = $this->_carrierFactory->get($order->getShippingMethod(true)->getCarrierCode());
-            if ($shipmentCarrier->getCarrierCode() != "starkenpro") return $this;
+            if (!$shipmentCarrier) {
+                return $this;
+            }
+            if (!is_object($shipmentCarrier)) {
+                return $this;
+            }
+            if ($shipmentCarrier->getCarrierCode() != "starkenpro") {
+                return $this;
+            }
             $shipmentCarrier->updateShipTrackingInfo($order);
         }
     }
